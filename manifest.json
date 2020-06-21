@@ -1,0 +1,43 @@
+{
+    "manifest_version": 2,
+    "name": "Eclipse Survival Kit",
+    "version": "0.1.0",
+    "description": "An attempt of making Deviantart's Eclipse more usable until devs doing it natively. Not a part of or in anyway approved by DA.",
+    "author": "Kody Wiremane",
+    "homepage_url": "https://github.com/KodyWiremane/eclipse-survival-kit",
+    "icons": {
+        "32": "images/esk.png",
+        "128": "images/esk_chrome_store.png"
+    },
+    "permissions":
+    [
+        "https://www.deviantart.com/*"
+    ],
+    "content_scripts":
+    [
+        {
+            "matches": ["https://www.deviantart.com/*"],
+            "css": [
+                "css/fix-user-menu-fallout.css",
+                "css/catchy-watch-update-mark.css"
+            ],
+            "run_at": "document_end",
+            "js":
+            [
+                "js/lib/logger.lib.js",
+                "js/lib/timer.lib.js",
+                "js/menu-faves.js"
+            ]
+        },
+        {
+            "matches":
+            [
+                "https://www.deviantart.com/*/gallery",
+                "https://www.deviantart.com/*/gallery/*/*",
+                "https://www.deviantart.com/*/favourites",
+                "https://www.deviantart.com/*/favourites/*/*"
+            ],
+            "css": ["css/gallection-numbering.css"]
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+/* Add an ordinal number to thumbnails in collection/gallery selectors & views. */
+
+div[data-hook="gallection_folder"]
+{
+    counter-reset: collection;
+}
+
+div[data-hook="gallection_folder"] section [data-hook^="gallection_folder_"] div.adwss
+{
+    counter-increment: collection;
+}
+
+div[data-hook="gallection_folder"] section [data-hook^="gallection_folder_"] div.adwss div:first-child div:first-child div:first-child::after
+{
+    font-size: 75%;
+    margin-left: .5em;
+    content: "#" counter(collection);
+}
+
+#sub-folder-gallery > div[id]
+{
+    counter-reset: thumbnail;
+}
+
+section[data-hook="deviation_std_thumb"] a[data-hook="deviation_link"]:not([aria-hidden="true"])::before
+{
+    font-size: 75%;
+    counter-increment: thumbnail;
+    content: "#" counter(thumbnail);
+}

@@ -1,0 +1,4 @@
+I am quite paranoid to include large amounts of unknown third-party code,
+unless I can observe and understand it completely, so everyone can better
+help with an advice. Hah, I'm writing all these official files like if I'm
+developing an enterprise scale product, lol.

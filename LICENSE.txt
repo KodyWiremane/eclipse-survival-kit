@@ -1,0 +1,6 @@
+Eclipse Survival Kit (ESK) is free for personal non-commercial use.
+Everyone is permitted to distribute the unmodified ESK.
+Everyone is permitted to modify ESK for personal use.
+Everyone is permitted to distribute modified ESK, if the modification
+provides a reference to the original ESK, and is distributed under a
+modified name.

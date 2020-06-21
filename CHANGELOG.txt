@@ -1,0 +1,6 @@
+v0.1.0 (2020-06-21)
+
+* Prevent the user menu show-up when hovering over its invisible round buttons.
+* Change the watch update mark (the static blue dot) to a bouncing orange ball.
+* Add a link to user's Favourites to the user menu.
+* Add an ordinal number to thumbnails in collection/gallery selectors & views.

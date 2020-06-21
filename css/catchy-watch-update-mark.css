@@ -1,0 +1,18 @@
+/* Change the watch update mark (the static blue dot) to a bouncing orange ball. */
+
+a[href="https://www.deviantart.com/notifications/watch"]::after
+{
+    animation: watch-bounce .9s ease-in infinite alternate;
+    margin-left: 5px !important;
+    margin-right: -15px !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 5px !important;
+    background-color: orange !important;
+}
+
+@keyframes watch-bounce
+{
+    0% { top: -10px; }
+    100% { top: 10px; }
+}
