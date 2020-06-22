@@ -1,0 +1,6 @@
+/* Enable mouse interaction for zoomed images (allow right-click saving) */
+
+.ReactModal__Content.ReactModal__Content--after-open[role="dialog"] > div > img
+{
+    pointer-events: auto;
+}
