@@ -1,5 +1,7 @@
 WIP
+
 * Enable mouse interaction for zoomed images (allow right-click saving).
+* Fix tooltips blocking mouse clicks on the comment text area, +transparency.
 
 v0.1.0 (2020-06-21)
 

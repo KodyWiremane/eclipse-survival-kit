@@ -18,6 +18,7 @@
         {
             "matches": ["https://www.deviantart.com/*"],
             "css": [
+                "css/fix-blocking-comment-tooltips.css",
                 "css/fix-user-menu-fallout.css",
                 "css/fix-zoomed-click-wall.css",
                 "css/catchy-watch-update-mark.css"
