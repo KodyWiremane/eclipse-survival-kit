@@ -1,0 +1,8 @@
+/* Fix tooltips blocking mouse clicks on the comment text area, +transparency. */
+
+body > div[id^="popper-root-"] > div,
+body > div[id^="popper-root-"] > div:hover
+{
+    opacity: .85 !important;
+    pointer-events: none !important;
+}

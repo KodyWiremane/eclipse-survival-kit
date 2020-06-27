@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Eclipse Survival Kit",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "An attempt of making Deviantart's Eclipse more usable until devs doing it natively. Not a part of or in anyway approved by DA.",
     "author": "Kody Wiremane",
     "homepage_url": "https://github.com/KodyWiremane/eclipse-survival-kit",
@@ -18,16 +18,20 @@
         {
             "matches": ["https://www.deviantart.com/*"],
             "css": [
+                "css/fix-blocking-comment-tooltips.css",
                 "css/fix-user-menu-fallout.css",
-                "css/catchy-watch-update-mark.css"
+                "css/fix-zoomed-click-wall.css",
+                "css/catchy-watch-update-mark.css",
+                "css/patch-user-menu.css"
             ],
-            "run_at": "document_end",
             "js":
             [
-                "js/lib/logger.lib.js",
-                "js/lib/timer.lib.js",
-                "js/menu-faves.js"
-            ]
+                "js/lib/logger.js",
+                "js/lib/timer.js",
+                "js/lib/utils.js",
+                "js/patch-user-menu.js"
+            ],
+            "run_at": "document_end"
         },
         {
             "matches":

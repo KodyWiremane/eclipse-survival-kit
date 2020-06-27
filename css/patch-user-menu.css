@@ -1,0 +1,42 @@
+/* For patch-user-menu.js */
+
+#esk-user-menu-panel
+{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-bottom: -.25em;
+
+}
+
+#esk-user-menu-panel:hover {
+    background: initial;
+    color: inherit;
+}
+
+#esk-user-menu-panel > *
+{
+    text-align: center;
+    font-size: 75%;
+    font-weight: bold;
+    padding: .25em .4em;
+    margin-bottom: .25em;
+    color: black;
+}
+
+#esk-user-menu-panel > :first-child
+{
+    margin-left: -.25em;
+}
+
+#esk-user-menu-panel > :last-child
+{
+    margin-right: -.25em;
+}
+
+#esk-user-menu-panel :hover
+{
+    color: white;
+    background: #00d38f;
+    background: var(--G12, #00d38f);
+}
