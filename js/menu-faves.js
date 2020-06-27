@@ -1,12 +1,12 @@
 /* Add a link to user's Favourites to the user menu. */
+/* FYI: There are users named literally favourites and Favorites. */
 
 (() => {
 'use strict';
 
 const STAB_TIMEOUT = 1000; // ms since last mutation to the menu subtree before injection
-const ITEM_NAME = 'My Favourites'; // Faves link text
-const SECTION_INDEX = 1; // menu section index (0-based)
-const ITEM_INDEX = 0; // section item index (0-based)
+const SECTION_IN_MENU = 1; // inject the link into this menu section (0-based index),
+const POSITION_IN_SECTION = 0; // this position (0-based index)
 
 
 
@@ -58,18 +58,6 @@ function waitForUserMenuAndInjectFavourites() {
 
 
 
-function injectFavouritesIntoUserMenu(userMenu) {
-    const userLink = getUserLinkFromUserMenu(userMenu);
-    const faveLink = buildFavouritesLinkFromUserLink(userLink);
-    const sharedClassNames = getChildSharedClassesFromUserMenu(userMenu);
-    const menuItem = buildMenuItemWithFaveLinkAndSharedClassNames(faveLink, sharedClassNames);
-    const section = getSectionFromUserMenuByIndex(userMenu, SECTION_INDEX);
-    insertMenuItemIntoSectionAtIndex(menuItem, section, ITEM_INDEX);
-    log.info('Favourites injected into user menu');
-}
-
-
-
 function getUserMenu () {
     var queried = document.querySelectorAll('#site-header-user-menu');
     if (queried.length === 0) {
@@ -81,17 +69,21 @@ function getUserMenu () {
     return queried[0];
 }
 
-function getUserLinkFromUserMenu (userMenu) {
-    var queried = userMenu.querySelectorAll('a[data-hook="user_link"]');
-    if (queried.length === 0) {
-        log.error('Cannot locate user link');
-        return null;
+function injectFavouritesIntoUserMenu(userMenu) {
+    try {
+        const menuPanelHtml = buildMenuPanelHtmlForUserMenu(userMenu);
+        const section = getSectionFromUserMenuByIndex(userMenu, SECTION_IN_MENU);
+        insertHtmlIntoSectionAtPosition(menuPanelHtml, section, POSITION_IN_SECTION);
+        log.info('Favourites injected into user menu');
+    } catch (e) {
+        log.error(`Cannot upgrade user menu: ${e}`);
     }
-    if (queried.length > 1) {
-        log.warning('Multiple user links located, picking first')
-    }
-    return queried[0];
-    // FYI: There are users named literally favourites and Favorites.
+}
+
+function buildMenuPanelHtmlForUserMenu(userMenu) {
+    const sharedClassNames = getChildSharedClassesFromUserMenu(userMenu);
+    const panelChildrenHtml = buildMenuPanelChildrenHtml();
+    return `<div id="esk-user-menu-panel" class="${sharedClassNames}">${panelChildrenHtml}</div>`;
 }
 
 function getChildSharedClassesFromUserMenu (userMenu) {
@@ -102,6 +94,14 @@ function getChildSharedClassesFromUserMenu (userMenu) {
         .map(names => names.split(/\s/g).filter(name => name.trim() !== ''))
         .reduce((acc, names) => names.filter(name => acc.includes(name)))
         .join(' ')
+}
+
+function buildMenuPanelChildrenHtml() {
+    const username = getUsernameFromCookies();
+    if (isUndefined(username)) {
+        throw 'Cannot get username';
+    }
+    return `<a href="https://www.deviantart.com/${username}/favourites">My Favourites</a>`;
 }
 
 function getSectionFromUserMenuByIndex(userMenu, sectionIndex) {
@@ -117,30 +117,15 @@ function getSectionFromUserMenuByIndex(userMenu, sectionIndex) {
     return queried[sectionIndex];
 }
 
-function buildFavouritesLinkFromUserLink(userLink) {
-    const suffix = 'favourites';
-    return userLink[userLink.length - 1] === '/' ? userLink + suffix : userLink + '/' + suffix;
-}
-
-function buildMenuItemWithFaveLinkAndSharedClassNames(faveLink, sharedClassNames) {
-    var item = document.createElement('a');
-    item.setAttribute('href', faveLink);
-    if (sharedClassNames) {
-        item.setAttribute('class', sharedClassNames);
-    }
-    item.appendChild(document.createTextNode(ITEM_NAME));
-    return item;
-}
-
-function insertMenuItemIntoSectionAtIndex(newItem, section, itemIndex) {
+function insertHtmlIntoSectionAtPosition(html, section, position) {
     var items = section.childNodes;
-    if (items.length < itemIndex + 1) {
+    if (items.length < position + 1) {
         log.warning('Unexpected end of section items, picking last');
-        itemIndex = items.length === 0 ? 0 : items.length;
+        position = items.length === 0 ? 0 : items.length;
     }
 
-    var before = items[itemIndex];
-    before ? section.insertBefore(newItem, before) : section.appendChild(newItem);
+    var before = items[position];
+    before ? before.insertAdjacentHTML('beforebegin', html) : section.insertAdjacentHTML('beforeend', html);
 }
 
 })()
