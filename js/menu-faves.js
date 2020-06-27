@@ -139,7 +139,7 @@ function insertMenuItemIntoSectionAtIndex(newItem, section, itemIndex) {
         itemIndex = items.length === 0 ? 0 : items.length;
     }
 
-    var before = items[itemIndex + 1];
+    var before = items[itemIndex];
     before ? section.insertBefore(newItem, before) : section.appendChild(newItem);
 }
 
