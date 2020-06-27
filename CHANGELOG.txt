@@ -1,3 +1,7 @@
+WIP
+
+* Fix invisible extension of the comment's userpic-link along its left side.
+
 v0.2.0 (2020-06-27)
 
 * Enable mouse interaction for zoomed images (allow right-click saving).
