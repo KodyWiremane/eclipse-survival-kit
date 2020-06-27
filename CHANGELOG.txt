@@ -1,3 +1,7 @@
+v0.2.1 (2020-06-27)
+
+* Fix ESK trying to add profile links to the user menu when not signed in.
+
 v0.2.0 (2020-06-27)
 
 * Enable mouse interaction for zoomed images (allow right-click saving).

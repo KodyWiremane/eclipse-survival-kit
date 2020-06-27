@@ -98,7 +98,7 @@ function getChildSharedClassesFromUserMenu (userMenu) {
 
 function buildMenuPanelChildrenHtml() {
     const username = getUsernameFromCookies();
-    if (isUndefined(username)) {
+    if (isUndefined(username) || username === '') {
         throw 'Cannot get username';
     }
     return `<a href="/${username}/about">About</a
