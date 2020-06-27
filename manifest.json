@@ -26,8 +26,8 @@
             "run_at": "document_end",
             "js":
             [
-                "js/lib/logger.lib.js",
-                "js/lib/timer.lib.js",
+                "js/lib/logger.js",
+                "js/lib/timer.js",
                 "js/menu-faves.js"
             ]
         },
