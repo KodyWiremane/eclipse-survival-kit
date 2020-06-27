@@ -2,6 +2,7 @@ WIP
 
 * Enable mouse interaction for zoomed images (allow right-click saving).
 * Fix tooltips blocking mouse clicks on the comment text area, +transparency.
+* Add profile section links to the user menu.
 
 v0.1.0 (2020-06-21)
 
