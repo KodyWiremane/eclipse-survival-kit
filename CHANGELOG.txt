@@ -1,4 +1,9 @@
-v0.2.2
+v0.3.0 (2020-06-29)
+
+* Add the extension options page for configuring modifications being applied.
+* Add a status/options-opener widget on /settings/apps.
+
+v0.2.2 (2020-06-28)
 
 * Fix invisible extension of the comment's userpic-link along its left side.
 

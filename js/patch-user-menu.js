@@ -4,6 +4,7 @@
 (() => {
 'use strict';
 
+const CFG_FLAG = 'ui-augments.add-um-profile-links'; // controlling configuration flag
 const STAB_TIMEOUT = 1000; // ms since last mutation to the menu subtree before injection
 const SECTION_IN_MENU = 0; // inject the link into this menu section (0-based index),
 const POSITION_IN_SECTION = 1; // this position (0-based index)
@@ -11,7 +12,8 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 const log = new Logger('ESK:PUM');
-waitForUserMenuAndInjectLinks();
+const config = new Config();
+config.get(CFG_FLAG, values => values[CFG_FLAG] && waitForUserMenuAndInjectLinks());
 
 
 

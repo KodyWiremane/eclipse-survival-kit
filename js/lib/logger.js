@@ -7,6 +7,10 @@ class Logger {
         console.log(`${this.scopeName}:${levelName}: ${message}`, ...extras);
     }
 
+    debug (message, ...extras) {
+        this.log('DEBUG', message, ...extras);
+    }
+
     info (message, ...extras) {
         this.log('INFO', message, ...extras);
     }

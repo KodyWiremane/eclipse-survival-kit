@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Eclipse Survival Kit",
-    "version": "0.2.2",
+    "version": "0.3.0",
     "description": "An attempt of making Deviantart's Eclipse more usable until devs doing it natively. Not a part of or in anyway approved by DA.",
     "author": "Kody Wiremane",
     "homepage_url": "https://github.com/KodyWiremane/eclipse-survival-kit",
@@ -11,8 +11,20 @@
     },
     "permissions":
     [
-        "https://www.deviantart.com/*"
+        "https://www.deviantart.com/*",
+        "storage"
     ],
+    "options_page": "core/options.html",
+    "background":
+    {
+        "scripts":
+        [
+            "js/lib/logger.js",
+            "js/lib/utils.js",
+            "js/lib/config.js",
+            "core/background.js"
+        ]
+    },
     "content_scripts":
     [
         {
@@ -30,6 +42,8 @@
                 "js/lib/logger.js",
                 "js/lib/timer.js",
                 "js/lib/utils.js",
+                "js/lib/config.js",
+                "js/expose-css-patch-flags.js",
                 "js/patch-user-menu.js"
             ],
             "run_at": "document_end"
@@ -43,6 +57,23 @@
                 "https://www.deviantart.com/*/favourites/*/*"
             ],
             "css": ["css/gallection-numbering.css"]
+        },
+        {
+            "matches":
+            [
+                "https://www.deviantart.com/settings/apps",
+                "https://www.deviantart.com/settings/apps#*",
+                "https://www.deviantart.com/settings/apps?*"
+            ],
+            "css":
+            [
+                "core/app-settings-widget.css",
+                "css/lib/esk-buttons.css"
+            ],
+            "js":
+            [
+                "core/app-settings-widget.js"
+            ]
         }
     ]
 }
