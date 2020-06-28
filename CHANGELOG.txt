@@ -1,3 +1,8 @@
+WIP
+
+* Add the extension options page for configuring modifications being applied.
+* Add a status/options-opener widget on /settings/apps.
+
 v0.2.2
 
 * Fix invisible extension of the comment's userpic-link along its left side.

@@ -1,5 +1,6 @@
 /* Fix invisible extension of the comment's userpic-link along its left side. */
 
+body[data-esk-flags~="fix-ghost-comlink"]
 [data-hook="comments_thread_item"] [data-hook="user_link"]
 {
     align-self: flex-start;

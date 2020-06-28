@@ -1,0 +1,39 @@
+body.esk button,
+body.esk input[type="button"],
+#esk-widget button,
+#esk-widget input[type="button"]
+{
+    border: .5mm outset #62806a;
+    position: relative;
+}
+
+body.esk button:focus,
+body.esk input[type="button"]:focus,
+#esk-widget button:focus,
+#esk-widget input[type="button"]:focus
+{
+    outline: none;
+}
+
+body.esk button:focus::after,
+body.esk input[type="button"]:focus::after,
+#esk-widget button:focus::after,
+#esk-widget input[type="button"]:focus::after
+{
+    content: "";
+    position: absolute;
+    top: .2mm;
+    left: .2mm;
+    right: .2mm;
+    bottom: .2mm;
+    border: 1px dotted gray;
+    pointer-events: none;
+}
+
+body.esk button:active,
+body.esk input[type="button"]:active,
+#esk-widget button:active,
+#esk-widget input[type="button"]:active
+{
+    border-style: inset;
+}

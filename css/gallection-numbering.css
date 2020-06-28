@@ -1,15 +1,18 @@
 /* Add an ordinal number to thumbnails in collection/gallery selectors & views. */
 
+body[data-esk-flags~="aug-thumb-ordinals"]
 div[data-hook="gallection_folder"]
 {
     counter-reset: collection;
 }
 
+body[data-esk-flags~="aug-thumb-ordinals"]
 div[data-hook="gallection_folder"] section [data-hook^="gallection_folder_"] div.adwss
 {
     counter-increment: collection;
 }
 
+body[data-esk-flags~="aug-thumb-ordinals"]
 div[data-hook="gallection_folder"] section [data-hook^="gallection_folder_"] div.adwss div:first-child div:first-child div:first-child::after
 {
     font-size: 75%;
@@ -17,11 +20,13 @@ div[data-hook="gallection_folder"] section [data-hook^="gallection_folder_"] div
     content: "#" counter(collection);
 }
 
+body[data-esk-flags~="aug-thumb-ordinals"]
 #sub-folder-gallery > div[id]
 {
     counter-reset: thumbnail;
 }
 
+body[data-esk-flags~="aug-thumb-ordinals"]
 section[data-hook="deviation_std_thumb"] a[data-hook="deviation_link"]:not([aria-hidden="true"])::before
 {
     font-size: 75%;

@@ -1,5 +1,6 @@
 /* Prevent the user menu show-up when hovering over its invisible round buttons. */
 
+body[data-esk-flags~="fix-um-fallout"]
 #site-header-user-menu
 {
     pointer-events: auto !important;

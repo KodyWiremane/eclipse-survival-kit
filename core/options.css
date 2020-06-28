@@ -1,0 +1,120 @@
+body
+{
+    background: #d4dfd0;
+    margin: 0px;
+    padding: 5mm;
+    font: 10pt/12pt "Arial",sans;
+}
+body > h1:first-child
+{
+    margin-top: 0px;
+    padding-top: 0px;
+    line-height: 1em;
+}
+
+#container
+{
+    display: inline-flex;
+    flex-direction: column;
+}
+
+/* OPTION GROUP, RADIO GROUP */
+
+.option-group
+{
+    margin: 1.5em 0px;
+    border: .5mm solid #62806a;
+    padding: 1.5em 1em .5em;
+}
+
+.option-group::before
+{
+    content: attr(data-label);
+    float:left;
+    margin-top: -2.75em;
+    font-weight: bold;
+    padding: .5em;
+    color: white;
+    background: #62806a;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+}
+
+.option-group > *,
+.radio-group > *
+{
+    margin: .5em auto;
+}
+
+.radio-group
+{
+    border-left: .5mm solid #62806a;
+    border-radius: 2mm;
+    margin-left: -2mm;
+    padding-left: 2mm;
+}
+
+/* OPTION SEPARATOR */
+.option-separator
+{
+    border: .25mm solid #62806a;
+}
+
+.option-text
+{
+    font-size: 12pt;
+    line-height: 14pt;
+}
+
+/* CONTROL */
+
+.control-wrapper
+{
+    display: block;
+}
+
+.control-label
+{
+    font-size: 12pt;
+    line-height: 14pt;
+}
+
+/* CHECKBOX, RADIO */
+
+.control-control[type="checkbox"],
+.control-control[type="radio"]
+{
+    display: none;
+}
+
+.control-wrapper .control-control[type="checkbox"] + .control-label::before,
+.control-wrapper .control-control[type="radio"] + .control-label::before
+{
+    font-weight: bold;
+    margin-right: .75em;
+}
+
+.control-wrapper .control-control[type="checkbox"] + .control-label::before
+{
+    content: "\2610"; /* ☐ */
+    font-weight: bold;
+    margin-right: .75em;
+}
+
+.control-wrapper .control-control[type="checkbox"]:checked + .control-label::before
+{
+    content: "\2611"; /* ☑ */
+}
+
+.control-wrapper .control-control[type="radio"] + .control-label::before
+{
+    content: "\25CE"; /* ◎ */
+    font-size: 125%;
+    font-weight: bold;
+    margin-right: .5em;
+}
+
+.control-wrapper .control-control[type="radio"]:checked + .control-label::before
+{
+    content: "\25C9"; /* ◉ */
+}

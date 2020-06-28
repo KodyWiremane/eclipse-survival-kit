@@ -1,5 +1,6 @@
 /* Change the watch update mark (the static blue dot) to a bouncing orange ball. */
 
+body[data-esk-flags~="aug-watch-indi"]
 a[href="https://www.deviantart.com/notifications/watch"]::after
 {
     animation: watch-bounce .9s ease-in infinite alternate;
