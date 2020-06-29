@@ -1,3 +1,7 @@
+WIP
+
+* Extend permissions to cover the Forum and Shop subdomains.
+
 v0.3.0 (2020-06-29)
 
 * Add the extension options page for configuring modifications being applied.

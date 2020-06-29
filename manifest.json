@@ -12,6 +12,8 @@
     "permissions":
     [
         "https://www.deviantart.com/*",
+        "https://forum.deviantart.com/*",
+        "https://shop.deviantart.com/*",
         "storage"
     ],
     "options_page": "core/options.html",
@@ -28,7 +30,11 @@
     "content_scripts":
     [
         {
-            "matches": ["https://www.deviantart.com/*"],
+            "matches": [
+                "https://www.deviantart.com/*",
+                "https://forum.deviantart.com/*",
+                "https://shop.deviantart.com/*"
+            ],
             "css": [
                 "css/fix-blocking-comment-tooltips.css",
                 "css/fix-commenter-greedy-link.css",
