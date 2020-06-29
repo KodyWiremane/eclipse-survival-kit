@@ -1,14 +1,13 @@
 'use strict';
 
-const configKeyPrefix = 'config.';
-const configStorageAreaName = 'local';
-const configStorage = chrome.storage[configStorageAreaName];
-
 class Config
 {
-    constructor () {
-        var listeners = [];
+    constructor (configKeyPrefix = 'config.') {
+        const STORAGE_AREA = 'local';
+        this.storage = chrome.storage[STORAGE_AREA];
+        this.configKeyPrefix = configKeyPrefix;
         this.lastError = undefined;
+        var listeners = [];
 
         this.onChanged = Object.freeze({
             addListener: (listener) => (listeners.push(listener), this),
@@ -18,11 +17,11 @@ class Config
             hasListener: (listener) => listeners.includes(listener)
         });
 
-        configStorage.onChanged.addListener((changes, changedAreaName) => {
-            if (changedAreaName !== configStorageAreaName) {
+        this.storage.onChanged.addListener((changes, changedAreaName) => {
+            if (changedAreaName !== STORAGE_AREA) {
                 return;
             }
-            const configChanges = Object.freeze(deprefixObjectKeys(cnahges, configKeyPrefix));
+            const configChanges = Object.freeze(deprefixObjectKeys(cnahges, this.configKeyPrefix));
             if (configChanges.keys().length === 0) {
                 return;
             }
@@ -40,10 +39,10 @@ class Config
                 query = [query];
                 // fall through to prefix a single key
             case 'array':
-                query = prefixArrayValues(query, configKeyPrefix);
+                query = prefixArrayValues(query, this.configKeyPrefix);
                 break;
             case 'object':
-                query = prefixObjectKeys(query, configKeyPrefix);
+                query = prefixObjectKeys(query, this.configKeyPrefix);
                 break;
             default:
                 throw 'query must be string|array|null';
@@ -53,14 +52,14 @@ class Config
             throw 'callback must be function'
         }
 
-        configStorage.get(
+        this.storage.get(
             query,
             (response) => (
                 this.lastError = chrome.runtime.lastError,
                 callback(
                     nullQuery
-                    ? filterAndDeprefixObjectKeys(response, configKeyPrefix)
-                    : deprefixObjectKeys(response, configKeyPrefix)
+                    ? filterAndDeprefixObjectKeys(response, this.configKeyPrefix)
+                    : deprefixObjectKeys(response, this.configKeyPrefix)
                 )
             )
         )
@@ -76,8 +75,8 @@ class Config
             throw 'callback must be function|undefined'
         }
 
-        configStorage.set(
-            prefixObjectKeys(request, configKeyPrefix),
+        this.storage.set(
+            prefixObjectKeys(request, this.configKeyPrefix),
             () => (this.lastError = chrome.runtime.lastError, noCallback || callback())
         );
     }
@@ -88,7 +87,7 @@ class Config
                 request = [request];
                 // fall through to prefix a single key
             case 'array':
-                request = prefixArrayValues(request, configKeyPrefix);
+                request = prefixArrayValues(request, this.configKeyPrefix);
                 break;
             default:
                 throw 'request must be string|array'
@@ -99,7 +98,7 @@ class Config
             throw 'callback must be function|undefined'
         }
 
-        configStorage.remove(
+        this.storage.remove(
             request,
             () => (this.lastError = chrome.runtime.lastError, noCallback || callback())
         )
@@ -111,10 +110,10 @@ class Config
             throw 'callback must be function|undefined'
         }
 
-        configStorage.get(
+        this.storage.get(
             null,
-            all => configStorage.remove(
-                Object.keys(all).filter(key => key.startsWith(configKeyPrefix)),
+            all => this.storage.remove(
+                Object.keys(all).filter(key => key.startsWith(this.configKeyPrefix)),
                 () => (this.lastError = chrome.runtime.lastError, noCallback || callback())
             )
         );
