@@ -1,0 +1,8 @@
+/* Disable thumbnail zoom on the deviation sidepanel */
+
+body[data-esk-flags~="aug-unzoom-side"]
+div[role="complementary"] a[data-hook="deviation_link"] img[alt][style]
+{
+    object-position: center !important;
+    object-fit: contain !important;
+}

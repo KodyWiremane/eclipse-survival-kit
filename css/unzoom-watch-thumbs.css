@@ -1,0 +1,8 @@
+/* Disable thumbnail zoom in watch feeds */
+
+body[data-esk-flags~="aug-unzoom-watch"]
+div[role="link"] img[alt][style]
+{
+    object-position: center !important;
+    object-fit: contain !important;
+}

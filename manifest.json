@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Eclipse Survival Kit",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "An attempt of making Deviantart's Eclipse more usable until devs doing it natively. Not a part of or in anyway approved by DA.",
     "author": "Kody Wiremane",
     "homepage_url": "https://github.com/KodyWiremane/eclipse-survival-kit",
@@ -12,6 +12,8 @@
     "permissions":
     [
         "https://www.deviantart.com/*",
+        "https://forum.deviantart.com/*",
+        "https://shop.deviantart.com/*",
         "storage"
     ],
     "options_page": "core/options.html",
@@ -28,12 +30,17 @@
     "content_scripts":
     [
         {
-            "matches": ["https://www.deviantart.com/*"],
-            "css": [
+            "matches":
+            [
+                "https://www.deviantart.com/*",
+                "https://forum.deviantart.com/*",
+                "https://shop.deviantart.com/*"
+            ],
+            "css":
+            [
                 "css/fix-blocking-comment-tooltips.css",
                 "css/fix-commenter-greedy-link.css",
                 "css/fix-user-menu-fallout.css",
-                "css/fix-zoomed-click-wall.css",
                 "css/catchy-watch-update-mark.css",
                 "css/patch-user-menu.css"
             ],
@@ -51,10 +58,32 @@
         {
             "matches":
             [
+                "https://www.deviantart.com/*/art/*"
+            ],
+            "css":
+            [
+                "css/fix-zoomed-click-wall.css",
+                "css/unzoom-side-thumbs.css"
+            ]
+        },
+        {
+            "matches":
+            [
+                "https://www.deviantart.com/notifications/watch",
+                "https://www.deviantart.com/notifications/watch/*"
+            ],
+            "css":
+            [
+                "css/unzoom-watch-thumbs.css"
+            ]
+        },
+        {
+            "matches":
+            [
                 "https://www.deviantart.com/*/gallery",
-                "https://www.deviantart.com/*/gallery/*/*",
+                "https://www.deviantart.com/*/gallery/*",
                 "https://www.deviantart.com/*/favourites",
-                "https://www.deviantart.com/*/favourites/*/*"
+                "https://www.deviantart.com/*/favourites/*"
             ],
             "css": ["css/gallection-numbering.css"]
         },

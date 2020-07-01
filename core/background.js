@@ -5,6 +5,8 @@
 const DEFAULTS = {
     'ui-augments.add-thumbs-with-ordinal-indices': true,
     'ui-augments.add-um-profile-links': true,
+    'ui-augments.disable-side-dva-zoom': false,
+    'ui-augments.disable-watch-feed-zoom': false,
     'ui-augments.enable-better-watch-indi': true,
     'ui-patches.enable-dva-img-pe': true,
     'ui-patches.fix-blocking-tooltips': true,

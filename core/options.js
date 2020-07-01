@@ -6,6 +6,8 @@
     config.get({
         'ui-augments.add-thumbs-with-ordinal-indices': true,
         'ui-augments.add-um-profile-links': true,
+        'ui-augments.disable-side-dva-zoom': true,
+        'ui-augments.disable-watch-feed-zoom': true,
         'ui-augments.enable-better-watch-indi': true,
         'ui-patches.enable-dva-img-pe': true,
         'ui-patches.fix-blocking-tooltips': true,
@@ -44,6 +46,16 @@
                 configuration['ui-augments.enable-better-watch-indi']
             ),
             createConfigCheckbox(
+                'ui-augments.disable-watch-feed-zoom',
+                'Disable thumbnail zoom in watch feeds',
+                configuration['ui-augments.disable-watch-feed-zoom']
+            ),
+            createConfigCheckbox(
+                'ui-augments.disable-side-dva-zoom',
+                'Disable thumbnail zoom on the deviation sidepanel',
+                configuration['ui-augments.disable-side-dva-zoom']
+            ),
+            createConfigCheckbox(
                 'ui-augments.add-thumbs-with-ordinal-indices',
                 'Add ordinal numbers to collection/gallery thumbnails',
                 configuration['ui-augments.add-thumbs-with-ordinal-indices']
@@ -59,7 +71,7 @@
             ),
             createConfigCheckbox(
                 'ui-patches.enable-dva-img-pe',
-                'Enable mouse interaction with image deviations',
+                'Enable mouse interaction for zoomed-in images (allow right-click saving)',
                 configuration['ui-patches.enable-dva-img-pe']
             ),
             createConfigCheckbox(
