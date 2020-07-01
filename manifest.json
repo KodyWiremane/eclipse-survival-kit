@@ -41,7 +41,6 @@
                 "css/fix-blocking-comment-tooltips.css",
                 "css/fix-commenter-greedy-link.css",
                 "css/fix-user-menu-fallout.css",
-                "css/fix-zoomed-click-wall.css",
                 "css/catchy-watch-update-mark.css",
                 "css/patch-user-menu.css"
             ],
@@ -55,6 +54,16 @@
                 "js/patch-user-menu.js"
             ],
             "run_at": "document_end"
+        },
+        {
+            "matches":
+            [
+                "https://www.deviantart.com/*/art/*"
+            ],
+            "css":
+            [
+                "css/fix-zoomed-click-wall.css"
+            ]
         },
         {
             "matches":
