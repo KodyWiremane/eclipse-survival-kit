@@ -6,6 +6,7 @@
     config.get({
         'ui-augments.add-thumbs-with-ordinal-indices': true,
         'ui-augments.add-um-profile-links': true,
+        'ui-augments.disable-side-dva-zoom': true,
         'ui-augments.disable-watch-feed-zoom': true,
         'ui-augments.enable-better-watch-indi': true,
         'ui-patches.enable-dva-img-pe': true,
@@ -48,6 +49,11 @@
                 'ui-augments.disable-watch-feed-zoom',
                 'Disable thumbnail zoom in watch feeds',
                 configuration['ui-augments.disable-watch-feed-zoom']
+            ),
+            createConfigCheckbox(
+                'ui-augments.disable-side-dva-zoom',
+                'Disable thumbnail zoom on the deviation sidepanel',
+                configuration['ui-augments.disable-side-dva-zoom']
             ),
             createConfigCheckbox(
                 'ui-augments.add-thumbs-with-ordinal-indices',

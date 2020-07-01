@@ -62,7 +62,8 @@
             ],
             "css":
             [
-                "css/fix-zoomed-click-wall.css"
+                "css/fix-zoomed-click-wall.css",
+                "css/unzoom-side-thumbs.css"
             ]
         },
         {

@@ -3,6 +3,7 @@ WIP
 * Extend permissions to cover the Forum and Shop subdomains.
 * Narrow fix-zoomed-click-wall.css scope to /*/art/*.
 * Disable thumbnail zoom in watch feeds.
+* Disable thumbnail zoom on the deviation sidepanel.
 
 v0.3.0 (2020-06-29)
 
