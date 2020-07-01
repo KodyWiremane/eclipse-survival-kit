@@ -65,7 +65,7 @@
             ),
             createConfigCheckbox(
                 'ui-patches.enable-dva-img-pe',
-                'Enable mouse interaction with image deviations',
+                'Enable mouse interaction for zoomed-in images (allow right-click saving)',
                 configuration['ui-patches.enable-dva-img-pe']
             ),
             createConfigCheckbox(

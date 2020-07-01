@@ -19,7 +19,7 @@ v0.2.1 (2020-06-27)
 
 v0.2.0 (2020-06-27)
 
-* Enable mouse interaction for zoomed images (allow right-click saving).
+* Enable mouse interaction for zoomed-in images (allow right-click saving).
 * Fix tooltips blocking mouse clicks on the comment text area, +transparency.
 * Add profile section links to the user menu.
 

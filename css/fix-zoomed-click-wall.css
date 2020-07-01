@@ -1,4 +1,4 @@
-/* Enable mouse interaction for zoomed images (allow right-click saving) */
+/* Enable mouse interaction for zoomed-in images (allow right-click saving) */
 
 body[data-esk-flags~="fix-dva-pe"]
 .ReactModal__Content.ReactModal__Content--after-open[role="dialog"] > div > img
