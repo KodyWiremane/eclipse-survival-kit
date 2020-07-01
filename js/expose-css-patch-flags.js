@@ -3,6 +3,7 @@
 (() => {
 const FLAGS = {
     'ui-augments.add-thumbs-with-ordinal-indices': 'aug-thumb-ordinals',
+    'ui-augments.disable-watch-feed-zoom': 'aug-unzoom-watch',
     'ui-augments.enable-better-watch-indi': 'aug-watch-indi',
     'ui-patches.enable-dva-img-pe': 'fix-dva-pe',
     'ui-patches.fix-blocking-tooltips': 'fix-tooltips',

@@ -1,6 +1,7 @@
 WIP
 
 * Extend permissions to cover the Forum and Shop subdomains.
+* Disable thumbnail zoom in watch feeds.
 
 v0.3.0 (2020-06-29)
 

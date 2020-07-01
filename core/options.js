@@ -6,6 +6,7 @@
     config.get({
         'ui-augments.add-thumbs-with-ordinal-indices': true,
         'ui-augments.add-um-profile-links': true,
+        'ui-augments.disable-watch-feed-zoom': true,
         'ui-augments.enable-better-watch-indi': true,
         'ui-patches.enable-dva-img-pe': true,
         'ui-patches.fix-blocking-tooltips': true,
@@ -42,6 +43,11 @@
                 'ui-augments.enable-better-watch-indi',
                 'Make watch update mark more prominent',
                 configuration['ui-augments.enable-better-watch-indi']
+            ),
+            createConfigCheckbox(
+                'ui-augments.disable-watch-feed-zoom',
+                'Disable thumbnail zoom in watch feeds',
+                configuration['ui-augments.disable-watch-feed-zoom']
             ),
             createConfigCheckbox(
                 'ui-augments.add-thumbs-with-ordinal-indices',
