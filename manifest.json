@@ -81,9 +81,9 @@
             "matches":
             [
                 "https://www.deviantart.com/*/gallery",
-                "https://www.deviantart.com/*/gallery/*/*",
+                "https://www.deviantart.com/*/gallery/*",
                 "https://www.deviantart.com/*/favourites",
-                "https://www.deviantart.com/*/favourites/*/*"
+                "https://www.deviantart.com/*/favourites/*"
             ],
             "css": ["css/gallection-numbering.css"]
         },
