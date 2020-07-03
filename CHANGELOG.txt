@@ -1,3 +1,7 @@
+WIP
+
+* Mitigate Eclipse resetting user menu in some cases (some soft page reloads).
+
 v0.3.1 (2020-07-01)
 
 * Extend permissions to cover the Forum and Shop subdomains.
