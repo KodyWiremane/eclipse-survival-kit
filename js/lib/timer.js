@@ -1,6 +1,6 @@
 class Timer
 {
-    constructor (timeout, callback, ...callbackArguments)
+    constructor(timeout, callback, ...callbackArguments)
     {
         if (!Number.isInteger(timeout)) {
             throw 'timeout must be integer';
@@ -15,23 +15,27 @@ class Timer
         this.timer = undefined;
     }
 
-    launch () {
+    launch()
+    {
         this.cancel();
         this.timer = setTimeout(this.callback, this.timeout, ...this.callbackArguments);
     }
 
-    cancel () {
+    cancel()
+    {
         if (this.timer !== undefined) {
             clearTimeout(this.timer);
             this.timer = undefined;
         }
     }
 
-    reset () {
+    reset()
+    {
         this.launch();
     }
 
-    fire () {
+    fire()
+    {
         this.cancel();
         this.callback(...this.callbackArguments);
     }

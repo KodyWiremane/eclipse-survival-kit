@@ -13,49 +13,49 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 const log = new Logger('ESK:PUM');
 const config = new Config();
-config.get(CFG_FLAG, values => values[CFG_FLAG] && waitForUserMenuAndInjectLinks());
+config.get(CFG_FLAG, values => values[CFG_FLAG] && monitorUserMenuAndInjectLinks());
 
 
 
-function waitForUserMenuAndInjectLinks() {
+function monitorUserMenuAndInjectLinks() {
+    const radar = new DomRadar(document.getElementById('root'));
     const mutationTimer = new Timer(STAB_TIMEOUT, timerCallback);
-    const observer = new MutationObserver(observerCallback);
-    const pageHeader = document.getElementById('da-legacy-header');
-    var userMenu = getUserMenu();
+    var userMenu;
+
+    radar.setEnterHandler(onRadarEnter);
+    radar.setLossHandler(onRadarLoss);
+
+    log.info('Waiting for user menu…');
+    tryLockUserMenu();
+
+    function onRadarEnter(entered) {
+        if (userMenu) {
+            return;
+        }
+        tryLockUserMenu();
+    }
+
+    function onRadarLoss(target) {
+        if (target !== userMenu) {
+            return;
+        }
+        log.info('User menu dropped');
+        tryLockUserMenu();
+    }
+
+    function tryLockUserMenu() {
+        userMenu = getUserMenu();
+        if (userMenu) {
+            radar.lockTarget(userMenu);
+            mutationTimer.reset();
+            log.info('User menu locked');
+        }
+    }
 
     function timerCallback () {
         log.info('Consider user menu stabilized');
-        observer.disconnect();
         injectLinksIntoUserMenu(userMenu);
     }
-
-    function observerCallback (mutationRecords, observer) {
-        let retargetMenu = getUserMenu();
-        if (retargetMenu !== null && retargetMenu !== userMenu) {
-            mutationTimer.reset();
-            userMenu = retargetMenu;
-            observer.observe(retargetMenu, observerConfig);
-            log.info('User menu locked');
-            return;
-        }
-        if (retargetMenu === null && userMenu !== null) {
-            mutationTimer.cancel();
-            userMenu = null;
-            observer.observe(pageHeader, observerConfig);
-            log.warning('User menu dropped');
-            return;
-        }
-    }
-
-    log.info('Waiting for user menu…');
-
-    if (userMenu) {
-        log.info('User menu locked');
-        mutationTimer.launch();
-    }
-
-    const observerConfig = {childList: true, subtree: true};
-    observer.observe(userMenu || pageHeader, observerConfig);
 }
 
 

@@ -2,7 +2,8 @@
 
 class Config
 {
-    constructor (configKeyPrefix = 'config.') {
+    constructor(configKeyPrefix = 'config.')
+    {
         const STORAGE_AREA = 'local';
         this.storage = chrome.storage[STORAGE_AREA];
         this.configKeyPrefix = configKeyPrefix;
@@ -29,7 +30,8 @@ class Config
         });
     }
 
-    get (query, callback) {
+    get(query, callback)
+    {
         const nullQuery = isNull(query);
 
         switch (phpType(query)) {
@@ -65,7 +67,8 @@ class Config
         )
     }
 
-    set (request, callback) {
+    set(request, callback)
+    {
         if (!isObject(request)) {
             throw 'request must be object';
         }
@@ -81,7 +84,8 @@ class Config
         );
     }
 
-    remove (request, callback) {
+    remove(request, callback)
+    {
         switch (phpType(request)) {
             case 'string':
                 request = [request];
@@ -104,7 +108,8 @@ class Config
         )
     }
 
-    clear (callback) {
+    clear(callback)
+    {
         const noCallback = isUndefined(callback);
         if (!noCallback && !isFunction(callback)) {
             throw 'callback must be function|undefined'

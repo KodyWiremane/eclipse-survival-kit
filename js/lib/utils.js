@@ -126,6 +126,19 @@ function filterAndDeprefixObjectKeys(target, keyPrefix) {
     return deprefixObjectKeys(filterObjectKeyPrefix(target, keyPrefix), keyPrefix);
 }
 
+/* DOM OPERATIONS */
+
+function isNodeDescendant(node, descendant) {
+    while (descendant.parentNode) {
+        descendant = descendant.parentNode;
+        if (descendant === node) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /* DA INTERFACE */
 
 function getUsernameFromCookies() {
