@@ -1,6 +1,8 @@
 /* Set <body data-esk-flags> from the config to trigger CSS patches */
 
 (() => {
+'use strict';
+
 const FLAGS = {
     'ui-augments.add-thumbs-with-ordinal-indices': 'aug-thumb-ordinals',
     'ui-augments.disable-side-dva-zoom': 'aug-unzoom-side',

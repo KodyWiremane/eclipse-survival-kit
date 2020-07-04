@@ -1,4 +1,6 @@
 (() => {
+    'use strict';
+
     const log = new Logger('ESK:ASW');
     var isRuntimeAlive = true;
 

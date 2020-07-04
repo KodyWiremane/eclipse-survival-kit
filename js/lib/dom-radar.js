@@ -1,3 +1,5 @@
+'use strict';
+
 class DomRadar
 {
     constructor(scope = document, config = {childList: true, subtree: true}, armed = true)
