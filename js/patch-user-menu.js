@@ -1,7 +1,7 @@
 /* Add profile section links to the user menu. */
 /* FYI: There are users named literally favourites and Favorites. */
-
 (() => {
+
 'use strict';
 
 const CFG_FLAG = 'ui-augments.add-um-profile-links'; // controlling configuration flag

@@ -1,6 +1,6 @@
 /* Set <body data-esk-flags> from the config to trigger CSS patches */
-
 (() => {
+
 'use strict';
 
 const FLAGS = {
