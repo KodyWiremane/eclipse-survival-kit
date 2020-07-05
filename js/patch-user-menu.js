@@ -18,7 +18,8 @@ config.get(CFG_FLAG, values => values[CFG_FLAG] && monitorUserMenuAndInjectLinks
 
 
 function monitorUserMenuAndInjectLinks() {
-    const radar = new DomRadar(document.getElementById('root'));
+    // watch React's #root carefully, or foist <body> when on legacy pages
+    const radar = new DomRadar(document.getElementById('root') || document.body);
     const mutationTimer = new Timer(STAB_TIMEOUT, timerCallback);
     var userMenu;
 

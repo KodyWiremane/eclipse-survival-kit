@@ -1,6 +1,7 @@
 WIP
 
 * Strictify JS code.
+* Fix user menu patcher failure on legacy pages.
 
 v0.3.2 (2020-07-03)
 
