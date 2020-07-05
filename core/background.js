@@ -1,4 +1,5 @@
 (() => {
+
 'use strict';
 
 /* DEFINITIONS */
@@ -94,4 +95,5 @@ function openOptionsPageFromTab(tab) {
     });
     */
 }
+
 })()
