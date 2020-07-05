@@ -18,12 +18,9 @@ class Config
             hasListener: (listener) => listeners.includes(listener)
         });
 
-        this.storage.onChanged.addListener((changes, changedAreaName) => {
-            if (changedAreaName !== STORAGE_AREA) {
-                return;
-            }
-            const configChanges = Object.freeze(deprefixObjectKeys(cnahges, this.configKeyPrefix));
-            if (configChanges.keys().length === 0) {
+        this.storage.onChanged.addListener(changes => {
+            const configChanges = Object.freeze(deprefixObjectKeys(changes, this.configKeyPrefix));
+            if (Object.keys(configChanges).length === 0) {
                 return;
             }
             listeners.forEach((listener) => listener(configChanges));
