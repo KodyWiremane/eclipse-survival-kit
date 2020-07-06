@@ -85,7 +85,8 @@ function injectLinksIntoUserMenu(userMenu) {
 
 function buildMenuPanelHtmlForUserMenu(userMenu) {
     const sharedClassNames = getChildSharedClassesFromUserMenu(userMenu);
-    const panelChildrenHtml = buildMenuPanelChildrenHtml();
+    const username = getUserNameFromUserMenu(userMenu);
+    const panelChildrenHtml = buildMenuPanelChildrenHtmlWithUsername(username);
     return `<div id="esk-user-menu-panel" class="${sharedClassNames}">${panelChildrenHtml}</div>`;
 }
 
@@ -99,8 +100,16 @@ function getChildSharedClassesFromUserMenu (userMenu) {
         .join(' ')
 }
 
-function buildMenuPanelChildrenHtml() {
-    const username = getUsernameFromCookies();
+function getUserNameFromUserMenu(userMenu) {
+    const userLink = userMenu.querySelector('a[data-hook="user_link"');
+    if (!userLink) {
+        log.error('Cannot read user link');
+        return;
+    }
+    return userLink.getAttribute('data-username');
+}
+
+function buildMenuPanelChildrenHtmlWithUsername(username) {
     if (isUndefined(username) || username === '') {
         throw 'Cannot get username';
     }
