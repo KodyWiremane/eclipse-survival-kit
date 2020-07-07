@@ -1,4 +1,4 @@
-WIP
+v0.3.4 (2020-07-07)
 
 * Fix Config listeners.
 * Revert to user menu patcher reading from the user link instead of cookies.

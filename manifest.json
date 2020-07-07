@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Eclipse Survival Kit",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "An attempt of making Deviantart's Eclipse more usable until devs doing it natively. Not a part of or in anyway approved by DA.",
     "author": "Kody Wiremane",
     "homepage_url": "https://github.com/KodyWiremane/eclipse-survival-kit",
