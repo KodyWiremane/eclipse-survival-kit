@@ -12,8 +12,11 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 const log = new Logger('ESK:PUM');
-const config = new Config();
-config.get(CFG_FLAG, values => values[CFG_FLAG] && monitorUserMenuAndInjectLinks());
+
+chrome.runtime.sendMessage(
+    {name: 'QueryConfig', query: CFG_FLAG},
+    response => response[CFG_FLAG] && monitorUserMenuAndInjectLinks()
+);
 
 
 

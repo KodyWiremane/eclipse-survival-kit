@@ -33,9 +33,21 @@ function setupMessageDispatcher() {
 }
 
 function messageDispatcher (message, sender, talkback) {
-    switch (message) {
-        case "OpenOptionsPage":
-            onOpenOptionsPage(sender);
+    switch (typeof message) {
+        case 'string':
+            switch (message) {
+                case 'OpenOptionsPage':
+                    onOpenOptionsPage(sender);
+                    break;
+            }
+            break;
+        case 'object':
+            switch (message.name) {
+                case 'QueryConfig':
+                    config.get(message.query, response => talkback(response));
+                    return true; // to keep talkback valid until called
+                    break;
+            }
             break;
     }
 }

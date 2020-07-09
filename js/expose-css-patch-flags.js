@@ -15,14 +15,16 @@ const FLAGS = {
 };
 
 const log = new Logger('ESK:FLAGS');
-const config = new Config();
 
-config.get(Object.keys(FLAGS), onFlagConfigRetrieved);
+chrome.runtime.sendMessage(
+    {name: 'QueryConfig', query: Object.keys(FLAGS)},
+    onFlagConfigRetrieved
+);
 
 
 
 function onFlagConfigRetrieved(settings) {
-    if (!config.lastError) {
+    if (settings) {
         document.body.setAttribute(
             'data-esk-flags',
             Object.entries(settings)
