@@ -1,6 +1,4 @@
-(() => {
-
-'use strict';
+// A temporary module incapsulating the old BG script flow
 
 /* DEFINITIONS */
 const DEFAULTS = {
@@ -14,7 +12,8 @@ const DEFAULTS = {
     'ui-patches.fix-comment-avatar-ghost-link': true,
     'ui-patches.fix-um-fallout': true
 };
-const OPTIONS_PAGE = chrome.runtime.getManifest().options_page;
+
+
 
 /* STARTUP */
 const log = new Logger('ESK:MAIN');
@@ -24,6 +23,8 @@ setupMessageDispatcher();
 setupFakePortListener();
 
 fillConfigGapsWithDefaults(() => log.info('Extension started successfully'));
+
+
 
 /* MESSAGE DISPATCHER */
 
@@ -39,15 +40,20 @@ function messageDispatcher (message, sender, talkback) {
     }
 }
 
+// for app-settings-widget.js:setupRuntimeMonitor()
 function setupFakePortListener() {
     chrome.runtime.onConnect.addListener(() => {});
 }
+
+
 
 /* MESSAGE HANDLERS */
 
 function onOpenOptionsPage(sender) {
     openOptionsPageFromTab(sender.tab);
 }
+
+
 
 /* EFFECTORS */
 
@@ -89,11 +95,9 @@ function openOptionsPageFromTab(tab) {
     chrome.runtime.openOptionsPage();
     /*
     chrome.tabs.create({
-        url: OPTIONS_PAGE,
+        url: chrome.runtime.getManifest().options_page,
         index: tab.index + 1,
         openerTabId: tab.id
     });
     */
 }
-
-})()

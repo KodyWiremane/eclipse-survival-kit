@@ -19,13 +19,7 @@
     "options_page": "core/options.html",
     "background":
     {
-        "scripts":
-        [
-            "js/lib/logger.js",
-            "js/lib/utils.js",
-            "js/lib/config.js",
-            "core/background.js"
-        ]
+        "page": "core/core.html"
     },
     "content_scripts":
     [
