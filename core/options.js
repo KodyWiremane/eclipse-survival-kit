@@ -3,7 +3,7 @@
 'use strict';
 
 const config = new Config();
-const log = new Logger('ESK:CFG')
+const log = new NativeLogger('ESK:CFG')
 config.get({
     'ui-augments.add-thumbs-with-ordinal-indices': true,
     'ui-augments.add-um-profile-links': true,

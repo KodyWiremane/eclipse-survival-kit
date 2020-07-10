@@ -11,7 +11,7 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 
-const log = new Logger('ESK:PUM');
+const log = new NativeLogger('ESK:PUM');
 
 chrome.runtime.sendMessage(
     {name: 'QueryConfig', query: CFG_FLAG},

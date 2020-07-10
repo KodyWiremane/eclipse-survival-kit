@@ -2,7 +2,7 @@
 
 'use strict';
 
-const log = new Logger('ESK:ASW');
+const log = new NativeLogger('ESK:ASW');
 var isRuntimeAlive = true;
 
 setupRuntimeMonitor();

@@ -16,7 +16,7 @@ const DEFAULTS = {
 
 
 /* STARTUP */
-const log = new Logger('ESK:MAIN');
+const log = new NativeLogger('ESK');
 const config = new Config();
 
 setupMessageDispatcher();

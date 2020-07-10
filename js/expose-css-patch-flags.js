@@ -14,7 +14,7 @@ const FLAGS = {
     'ui-patches.fix-um-fallout': 'fix-um-fallout'
 };
 
-const log = new Logger('ESK:FLAGS');
+const log = new NativeLogger('ESK:FLAGS');
 
 chrome.runtime.sendMessage(
     {name: 'QueryConfig', query: Object.keys(FLAGS)},

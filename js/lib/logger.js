@@ -6,28 +6,34 @@ class Logger {
         this.scopeName = `[${scopeName}]`;
     }
 
-    log(levelName, message, ...extras)
+    logWithLevel(levelName, message, ...extras)
     {
-        console.log(`${this.scopeName}:${levelName}: ${message}`, ...extras);
+        const levelTag = levelName === 'NORMAL' ? '' : `:${levelName}`;
+        console.log(`${this.scopeName}${levelTag}: ${message}`, ...extras);
     }
 
     debug(message, ...extras)
     {
-        this.log('DEBUG', message, ...extras);
+        this.logWithLevel('DEBUG', message, ...extras);
     }
 
     info(message, ...extras)
     {
-        this.log('INFO', message, ...extras);
+        this.logWithLevel('INFO', message, ...extras);
+    }
+
+    log(message, ...extras)
+    {
+        this.logWithLevel('NORMAL', message, ...extras);
     }
 
     warning(message, ...extras)
     {
-        this.log('WARNING', message, ...extras);
+        this.logWithLevel('WARNING', message, ...extras);
     }
 
     error(message, ...extras)
     {
-        this.log('ERROR', message, ...extras);
+        this.logWithLevel('ERROR', message, ...extras);
     }
 }
