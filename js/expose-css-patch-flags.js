@@ -15,11 +15,11 @@ const FLAGS = {
 };
 
 const log = new NativeLogger('ESK:FLAGS');
+const eskLink = new EskMessageClient();
 
-chrome.runtime.sendMessage(
-    {name: 'QueryConfig', query: Object.keys(FLAGS)},
-    onFlagConfigRetrieved
-);
+eskLink.sendMessage('QueryConfig', Object.keys(FLAGS))
+.then(onFlagConfigRetrieved)
+.catch(error => log.error(`Config query failed: ${error.message}`));
 
 
 

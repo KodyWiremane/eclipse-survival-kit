@@ -12,11 +12,11 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 const log = new NativeLogger('ESK:PUM');
+const eskLink = new EskMessageClient();
 
-chrome.runtime.sendMessage(
-    {name: 'QueryConfig', query: CFG_FLAG},
-    response => response[CFG_FLAG] && monitorUserMenuAndInjectLinks()
-);
+eskLink.sendMessage('QueryConfig', CFG_FLAG)
+.then(response => response[CFG_FLAG] && monitorUserMenuAndInjectLinks())
+.catch(error => log.error(`Config query failed: ${error.message}`));
 
 
 

@@ -1,5 +1,7 @@
 // A temporary module incapsulating the old BG script flow
 
+import {PromisedStorage} from './promised-storage.mjs';
+
 /* DEFINITIONS */
 const DEFAULTS = {
     'ui-augments.add-thumbs-with-ordinal-indices': true,
@@ -17,12 +19,14 @@ const DEFAULTS = {
 
 /* STARTUP */
 const log = new NativeLogger('ESK');
-const config = new Config();
+const config = new PromisedStorage('config.', 'local');
 
 setupMessageDispatcher();
 setupFakePortListener();
 
-fillConfigGapsWithDefaults(() => log.info('Extension started successfully'));
+fillConfigGapsWithDefaults()
+.then(() => log.info('Extension started successfully'))
+.catch(error => log.error(`Failed to health-check stored config: ${error.message}`));
 
 
 
@@ -32,22 +36,25 @@ function setupMessageDispatcher() {
     chrome.runtime.onMessage.addListener(messageDispatcher);
 }
 
-function messageDispatcher (message, sender, talkback) {
-    switch (typeof message) {
-        case 'string':
-            switch (message) {
-                case 'OpenOptionsPage':
-                    onOpenOptionsPage(sender);
-                    break;
-            }
+// returns true when needs to call talkback asynchronously
+function messageDispatcher (envelope, sender, talkback) {
+    if (!isObject(envelope)) {
+        throw new TypeError('Type of envelope must be object')
+    }
+    const {name: message, payload: query} = envelope;
+
+    switch (message) {
+        case 'OpenOptionsPage':
+            onOpenOptionsPage(sender)
+            .then(() => talkback(null))
+            .catch(error => (log.error(error.message), talkback({'error': error.message})));
+            return true;
             break;
-        case 'object':
-            switch (message.name) {
-                case 'QueryConfig':
-                    config.get(message.query, response => talkback(response));
-                    return true; // to keep talkback valid until called
-                    break;
-            }
+        case 'QueryConfig':
+            config.get(query)
+            .then(items => talkback({payload: items}))
+            .catch(error => (log.error(error.message), talkback({'error': error.message})));
+            return true;
             break;
     }
 }
@@ -62,25 +69,21 @@ function setupFakePortListener() {
 /* MESSAGE HANDLERS */
 
 function onOpenOptionsPage(sender) {
-    openOptionsPageFromTab(sender.tab);
+    return openOptionsPageFromTab(sender.tab);
 }
 
 
 
 /* EFFECTORS */
 
-function fillConfigGapsWithDefaults(callback) {
-    config.get(
-        Object.keys(DEFAULTS),
-        stored => onStoredConfigRetrieved(stored, callback)
+function fillConfigGapsWithDefaults() {
+    return (
+        config.get(Object.keys(DEFAULTS))
+        .then(onStoredConfigRetrieved)
     );
 }
 
-function onStoredConfigRetrieved(stored, callback) {
-    if (config.lastError) {
-        log.error(`Failed to retrieve config values: ${config.lastError}`);
-    }
-
+function onStoredConfigRetrieved(stored) {
     const existing = Object.keys(stored);
 
     const overlay = Object.entries(DEFAULTS)
@@ -88,23 +91,16 @@ function onStoredConfigRetrieved(stored, callback) {
         .reduce((acc, pair) => {acc[pair[0]] = pair[1]; return acc;}, {});
 
     if (Object.keys(overlay).length > 0) {
-        config.set(overlay, () => onDefaultsWrittenCallOrReport(callback));
-    } else {
-        callback();
-    }
-}
-
-function onDefaultsWrittenCallOrReport(callback) {
-    if (!config.lastError) {
-        log.info('Succesfully recreated missing config values from defaults');
-        callback();
-    } else {
-        log.error(`Failed to recreate missing config values from defaults: ${config.lastError}`);
+        return config.set(overlay);
     }
 }
 
 function openOptionsPageFromTab(tab) {
-    chrome.runtime.openOptionsPage();
+    return new Promise((resolve, reject) =>
+        chrome.runtime.openOptionsPage(
+            () => !chrome.runtime.lastError ? resolve() : reject(chrome.runtime.lastError)
+        )
+    );
     /*
     chrome.tabs.create({
         url: chrome.runtime.getManifest().options_page,
