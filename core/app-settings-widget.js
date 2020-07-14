@@ -2,7 +2,8 @@
 
 'use strict';
 
-const log = new Logger('ESK:ASW');
+const log = new NativeLogger('ESK:ASW');
+const eskLink = new EskMessageClient();
 var isRuntimeAlive = true;
 
 setupRuntimeMonitor();
@@ -47,7 +48,8 @@ function callIfRuntimeAlive(callback) {
 }
 
 function requestOpenOptionsPage() {
-    chrome.runtime.sendMessage("OpenOptionsPage");
+    eskLink.sendMessage("OpenOptionsPage")
+    .catch(error => log.error(`Open options page failed: ${error.message}`));
 }
 
 function informUserRuntimeIsDead() {

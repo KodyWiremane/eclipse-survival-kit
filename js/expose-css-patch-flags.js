@@ -14,15 +14,17 @@ const FLAGS = {
     'ui-patches.fix-um-fallout': 'fix-um-fallout'
 };
 
-const log = new Logger('ESK:FLAGS');
-const config = new Config();
+const log = new NativeLogger('ESK:FLAGS');
+const eskLink = new EskMessageClient();
 
-config.get(Object.keys(FLAGS), onFlagConfigRetrieved);
+eskLink.sendMessage('QueryConfig', Object.keys(FLAGS))
+.then(onFlagConfigRetrieved)
+.catch(error => log.error(`Config query failed: ${error.message}`));
 
 
 
 function onFlagConfigRetrieved(settings) {
-    if (!config.lastError) {
+    if (settings) {
         document.body.setAttribute(
             'data-esk-flags',
             Object.entries(settings)

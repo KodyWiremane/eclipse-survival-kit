@@ -11,9 +11,12 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 
-const log = new Logger('ESK:PUM');
-const config = new Config();
-config.get(CFG_FLAG, values => values[CFG_FLAG] && monitorUserMenuAndInjectLinks());
+const log = new NativeLogger('ESK:PUM');
+const eskLink = new EskMessageClient();
+
+eskLink.sendMessage('QueryConfig', CFG_FLAG)
+.then(response => response[CFG_FLAG] && monitorUserMenuAndInjectLinks())
+.catch(error => log.error(`Config query failed: ${error.message}`));
 
 
 
