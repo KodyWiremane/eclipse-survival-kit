@@ -11,10 +11,9 @@
     },
     "permissions":
     [
-        "https://www.deviantart.com/*",
-        "https://forum.deviantart.com/*",
-        "https://shop.deviantart.com/*",
-        "storage"
+        "*://*.deviantart.com/*",
+        "storage",
+        "cookies"
     ],
     "options_page": "core/options.html",
     "background":
