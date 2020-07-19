@@ -1,6 +1,6 @@
 // A temporary module incapsulating the old BG script flow
 
-import {PromisedStorage} from './promised-storage.mjs';
+import {EskExtensionConfig} from './esk-extension-config.mjs';
 
 /* DEFINITIONS */
 const DEFAULTS = {
@@ -19,7 +19,7 @@ const DEFAULTS = {
 
 /* STARTUP */
 const log = new NativeLogger('ESK');
-const config = new PromisedStorage('config.', 'local');
+const config = new EskExtensionConfig();
 
 setupMessageDispatcher();
 setupFakePortListener();
