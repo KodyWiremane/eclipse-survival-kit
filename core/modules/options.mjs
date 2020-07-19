@@ -1,7 +1,3 @@
-(() => {
-
-'use strict';
-
 const config = new Config();
 const log = new NativeLogger('ESK:CFG')
 config.get({
@@ -183,5 +179,3 @@ function getControlValue(control) {
             return undefined;
     }
 }
-
-})()
