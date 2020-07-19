@@ -1,4 +1,4 @@
-WIP
+v0.3.5 (2020-07-19)
 
 * Switch to thick backgound script with modular dependencies.
 * Add modularization to the options page.
