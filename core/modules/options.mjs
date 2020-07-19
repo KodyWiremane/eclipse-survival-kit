@@ -1,4 +1,6 @@
-const config = new Config();
+import {EskExtensionConfig} from './esk-extension-config.mjs';
+
+const config = new EskExtensionConfig();
 const log = new NativeLogger('ESK:CFG')
 config.get({
     'ui-augments.add-thumbs-with-ordinal-indices': true,
@@ -10,7 +12,9 @@ config.get({
     'ui-patches.fix-blocking-tooltips': true,
     'ui-patches.fix-comment-avatar-ghost-link': true,
     'ui-patches.fix-um-fallout': true
-}, spawnUi)
+})
+.then(data => spawnUi(data))
+.catch(error => log.error('Failed to get config', error));
 
 function spawnUi(configuration) {
 
@@ -150,10 +154,9 @@ function onControlChange(event) {
     const controlValue = getControlValue(target);
     const request = {};
     request[controlName] = controlValue;
-    config.set(request, () => config.lastError
-        ? log.error(`Failed to store ${controlName} setting`)
-        : log.info(`Successfully stored ${controlName} setting`)
-    );
+    config.set(request)
+    .then(() => log.info(`Successfully stored ${controlName} setting`))
+    .catch(error => log.error(`Failed to store ${controlName} setting`, error));
 }
 
 function getControlName(control) {
