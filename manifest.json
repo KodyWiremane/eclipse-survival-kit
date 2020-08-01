@@ -100,6 +100,22 @@
             [
                 "core/app-settings-widget.js"
             ]
+        },
+        {
+            "matches":
+            [
+                "https://www.deviantart.com/developers/apps",
+                "https://www.deviantart.com/developers/apps#*",
+                "https://www.deviantart.com/developers/apps?*"
+            ],
+            "css":
+            [
+                "css/app-bind.css"
+            ],
+            "js":
+            [
+                "js/app-bind.js"
+            ]
         }
     ]
 }

@@ -1,7 +1,12 @@
 import {EskExtensionConfig} from './esk-extension-config.mjs';
+import {UserInfo} from './userinfo.mjs';
+import {Dapi} from './dapi.mjs';
 
 const config = new EskExtensionConfig();
 const log = new NativeLogger('ESK:CFG')
+const dapi = new Dapi();
+const ESK_DAPI_SCOPE = ['basic'];
+
 config.get({
     'ui-augments.add-thumbs-with-ordinal-indices': true,
     'ui-augments.add-um-profile-links': true,
@@ -13,27 +18,141 @@ config.get({
     'ui-patches.fix-comment-avatar-ghost-link': true,
     'ui-patches.fix-um-fallout': true
 })
-.then(data => spawnUi(data))
-.catch(error => log.error('Failed to get config', error));
+.catch(error => log.error('Failed to get config', error))
+.then(data => { return spawnUi(data); })
+.catch(error => log.error('Failed to spawn UI', error));
 
-function spawnUi(configuration) {
+async function spawnUi(configuration) {
 
     const container = document.getElementById('container');
     container.addEventListener("change", onControlChange);
 
     const gNote = createOptionGroup('Note');
-    gNote.appendChild(createOptionText(
-        'New configuration is read on page load. Refresh your DA tabs to apply new settings.')
-    );
+    const gDapiStatus = createOptionGroup('Auth Status');
     const gUiAugments = createOptionGroup('UI Augments');
     const gUiPatches = createOptionGroup('UI Patches');
 
     [
         gNote,
+        gDapiStatus,
         gUiAugments,
         gUiPatches
     ]
     .forEach(group => container.appendChild(group));
+
+    gNote.appendChild(createOptionText(
+        'New configuration is read on page load. Refresh your DA tabs to apply new settings.')
+    );
+
+    const userInfo = await UserInfo.get();
+    const uniqueId = userInfo.getUniqueId();
+
+    dapi.getUserStatus(userInfo)
+    .catch(error => log.error(`Failed to get auth status:`, error))
+    .then(async function(status) {
+        log.info(`Auth status: ${Dapi.statusToString(status)}`);
+        switch (status) {
+            case Dapi.STATUS_AMBIGUOUS:
+                gDapiStatus.appendChild(createOptionText(
+                    'The status is ambigous, but not handled by the current implementation yet'
+                ));
+                break;
+
+            case Dapi.STATUS_ANONYMOUS:
+                gDapiStatus.appendChild(createOptionText(
+                    'You do not appear logged in. Log in to DA to access ESK integration functionality.'
+                ));
+                break;
+
+            case Dapi.STATUS_UNBOUND:
+                gDapiStatus.appendChild(createOptionText(
+                    'ESK is not bound to any of your applications. '
+                    + 'You must register a dummy DA application so ESK can use its identity '
+                    + 'to access DA API on your behalf.'
+                ));
+                gDapiStatus.appendChild(createOptionText(
+                    'Edit the application and set Grant Type to Authorization Code, '
+                    + `and Redirect URI Whitelist to ${dapi.getRedirectUri()}, `
+                    + 'and uncheck everything in the Gallery and Group options.'
+                ));
+                gDapiStatus.appendChild(createOptionText(
+                    'Then use the Bind ESK to app button in DA application list.'
+                ));
+                gDapiStatus.appendChild(createButton(
+                    'Bind to app',
+                    e => (e.target.disabled = true, onClick_Bind())
+                ));
+                break;
+
+            case Dapi.STATUS_BOUND:
+                const boundAppData = await dapi.getBoundAppData(uniqueId);
+                gDapiStatus.appendChild(createOptionText(
+                    `ESK is bound to your application ID:${boundAppData.appId}.`
+                ));
+                gDapiStatus.appendChild(createOptionText(
+                    'You can rebind to another application, or activate the binding '
+                    + 'so ESK can actually access DA API on your behalf.'
+                ));
+                gDapiStatus.appendChild(createOptionText(
+                    `(Remember, your application must have ${dapi.getRedirectUri()} in its Redirect URI Whitelist); `
+                    + 'edit it if it does not.'
+                ));
+                gDapiStatus.appendChild(createButton(
+                    'Activate',
+                    e => (e.target.disabled = true, onClick_Activate())
+                ));
+                gDapiStatus.appendChild(createButton(
+                    'Edit App',
+                    e => (e.target.disabled = true, onClick_Edit(boundAppData.appId))
+                ))
+                gDapiStatus.appendChild(createButton(
+                    'Unbind',
+                    e => (e.target.disabled = true, onClick_Unbind())
+                ));
+                break;
+            case Dapi.STATUS_UNAUTHORIZED:
+                gDapiStatus.appendChild(createOptionText(
+                    'STATUS_UNAUTHORIZED (handling yet to be implemented).'
+                ));
+                break;
+            case Dapi.STATUS_AUTHORIZED:
+                gDapiStatus.appendChild(createOptionText(
+                    'STATUS_AUTHORIZED (handling yet to be implemented).'
+                ));
+                break;
+            default:
+                gDapiStatus.appendChild(createOptionText(
+                    `Unknown status ${status}, ask the developer.`
+                ))
+    }});
+
+    function onClick_Bind() {
+        window.location.href = dapi.getBindingUri();
+    }
+
+    function onClick_Activate() {
+        dapi.launchWebAuthFlow(uniqueId, ESK_DAPI_SCOPE)
+        .catch(e => {
+            log.error('Failed to activate API binding:', e);
+            window.alert(`Failed to activate API binding: ${e.message}`);
+            window.location.reload();
+        })
+        .then(() => window.location.reload());
+    }
+
+    function onClick_Edit(appId) {
+        window.location.href = dapi.getEditUriForAppId(appId);
+    }
+
+    function onClick_Unbind() {
+        dapi.unbind()
+        .catch(e => {
+            log.error('Failed to unbind ESK', e);
+            window.alert(`Failed to unbind ESK: ${e.message}`);
+            window.location.reload();
+        })
+        .then(() => (window.alert('ESK unbound successfully'), window.location.reload()));
+    }
 
     [
         createConfigCheckbox(
