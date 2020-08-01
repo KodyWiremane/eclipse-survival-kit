@@ -35,8 +35,12 @@ function injectWidget() {
         ></section>`
     );
 
-    document.getElementById('esk-oa2status')
-        .appendChild(document.createTextNode('NOT IMPLEMENTED ATM'));
+    eskLink.sendMessage("QueryDapiStatus")
+    .then(status => document.getElementById('esk-oa2status').appendChild(document.createTextNode(status)))
+    .catch(error => {
+        log.error(`Failed to retrieve OAuth status: ${error.message}`);
+        document.getElementById('esk-oa2status').appendChild(document.createTextNode('<ERROR>'));
+    });
 
     document.getElementById('esk-options').addEventListener(
         'click', () => callIfRuntimeAlive(requestOpenOptionsPage)

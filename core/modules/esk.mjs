@@ -1,6 +1,7 @@
 // A temporary module incapsulating the old BG script flow
 
 import {EskExtensionConfig} from './esk-extension-config.mjs';
+import {Dapi} from './dapi.mjs';
 
 /* DEFINITIONS */
 const DEFAULTS = {
@@ -20,6 +21,7 @@ const DEFAULTS = {
 /* STARTUP */
 const log = new NativeLogger('ESK');
 const config = new EskExtensionConfig();
+const dapi = new Dapi();
 
 setupMessageDispatcher();
 setupFakePortListener();
@@ -57,6 +59,12 @@ function messageDispatcher (envelope, sender, talkback) {
         case 'QueryConfig':
             config.get(query)
             .then(items => talkback({payload: items}))
+            .catch(error => (log.error(error.message), talkback({'error': error.message})));
+            return true;
+            break;
+        case 'QueryDapiStatus':
+            dapi.getUserStatus()
+            .then(status => talkback({payload: Dapi.statusToString(status)}))
             .catch(error => (log.error(error.message), talkback({'error': error.message})));
             return true;
             break;
