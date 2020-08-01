@@ -111,6 +111,14 @@ function createOptionText(text) {
     return wrapper;
 }
 
+function createButton(label, onClick) {
+    const control = document.createElement('button');
+    control.appendChild(document.createTextNode(label));
+    control.className = 'control-button';
+    control.addEventListener('click', onClick);
+    return control;
+}
+
 function createConfigCheckbox(name, label, checked = false) {
     const control = document.createElement('label');
     control.className = 'control-wrapper';

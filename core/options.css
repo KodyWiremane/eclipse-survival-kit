@@ -79,6 +79,19 @@ body > h1:first-child
     line-height: 14pt;
 }
 
+/* BUTTON */
+.control-button
+{
+    height: 1.5em;
+    border-width: .5mm;
+    border-color: #62806a;
+}
+
+.control-button + .control-button
+{
+    margin-left: .5em;
+}
+
 /* CHECKBOX, RADIO */
 
 .control-control[type="checkbox"],
