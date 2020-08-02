@@ -62,13 +62,21 @@ function bindApp(appFrame, buttonRegistry) {
     buttonRegistry.forEach(button => button.remove());
     buttonRegistry.length = 0;
 
-    log.info(
-`Mock bind:
-APP_NAME: ${appName},
-APP_ID: ${appId},
-CLIENT_ID: ${clientId},
-CLIENT_SECRET: ${clientSecret}`
-    );
+    eskLink.sendMessage(
+        'BindToApp',
+        {
+            'appName': appName,
+            'appId': appId,
+            'clientId': clientId,
+            'clientSecret': clientSecret
+        }
+    )
+    .catch(error => log.error(`Failed binding to app ID ${appId}`, error))
+    .then(() => {
+        log.info(`Successfully bound to app ${appName} (ID ${appId}, Client ID ${clientId})`);
+        eskLink.sendMessage('OpenOptionsPageHere')
+        .catch('Cannot navigate to the ESK configuration page. Please proceed there yourself.');
+    });
 }
 
 })()

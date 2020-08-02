@@ -68,6 +68,12 @@ function messageDispatcher (envelope, sender, talkback) {
             .catch(error => (log.error(error.message), talkback({'error': error.message})));
             return true;
             break;
+        case 'BindToApp':
+            dapi.bindToApp(query.appName, query.appId, query.clientId, query.clientSecret)
+            .then(() => talkback(null))
+            .catch(error => (log.error(error.message), talkback({'error': error.message})));
+            return true;
+            break;
     }
 }
 
