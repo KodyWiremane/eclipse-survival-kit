@@ -13,7 +13,8 @@
     [
         "*://*.deviantart.com/*",
         "storage",
-        "cookies"
+        "cookies",
+        "identity"
     ],
     "options_page": "core/options.html",
     "background":
