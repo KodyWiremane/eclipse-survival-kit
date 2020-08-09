@@ -50,6 +50,10 @@ function messageDispatcher (envelope, sender, talkback) {
             .catch(error => (log.error(error.message), talkback({'error': error.message})));
             return true;
             break;
+        case 'OpenOptionsPageHere':
+            talkback(null);
+            onOpenOptionsPageHere(sender);
+            break;
         case 'QueryConfig':
             config.get(query)
             .then(items => talkback({payload: items}))
@@ -70,6 +74,10 @@ function setupFakePortListener() {
 
 function onOpenOptionsPage(sender) {
     return openOptionsPageFromTab(sender.tab);
+}
+
+function onOpenOptionsPageHere(sender) {
+    chrome.tabs.update(sender.tab.id, {url: chrome.runtime.getURL('core/options.html')});
 }
 
 
