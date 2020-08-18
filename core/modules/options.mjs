@@ -131,7 +131,7 @@ async function spawnUi(configuration) {
     }
 
     function onClick_Activate() {
-        dapi.launchWebAuthFlow(uniqueId, ESK_DAPI_SCOPE)
+        dapi.requestAuthorization(uniqueId, ESK_DAPI_SCOPE)
         .catch(e => {
             log.error('Failed to activate API binding:', e);
             window.alert(`Failed to activate API binding: ${e.message}`);

@@ -155,6 +155,11 @@ export class Dapi
         return `https://www.deviantart.com/submit/?deviationids=${encodeURIComponent(appId)}`;
     }
 
+    async requestAuthorization(uniqueId, scope)
+    {
+        return await this.launchWebAuthFlow(uniqueId, scope);
+    }
+
     async launchWebAuthFlow(uniqueId, scope)
     {
         const ids = await this.getBoundAppData(uniqueId);
