@@ -147,7 +147,8 @@ export class Dapi
 
     getRedirectUri()
     {
-        return chrome.identity.getRedirectURL('/ESK/');
+        //return chrome.identity.getRedirectURL('/ESK/');
+        return chrome.runtime.getURL('core/authorize.html');
     }
 
     getEditUriForAppId(appId)
@@ -155,90 +156,91 @@ export class Dapi
         return `https://www.deviantart.com/submit/?deviationids=${encodeURIComponent(appId)}`;
     }
 
-    async requestAuthorization(uniqueId, scope)
+    async requestAuthorizationUri(uniqueId, scope)
     {
-        return await this.launchWebAuthFlow(uniqueId, scope);
+        const ids = await this.getBoundAppData(uniqueId);
+        const clientId = ids.clientId;
+
+        const requestUrl = await this.prepareWebAuthFlowUrl(uniqueId, clientId, scope);
+
+        return requestUrl;
     }
 
     async launchWebAuthFlow(uniqueId, scope)
     {
         const ids = await this.getBoundAppData(uniqueId);
-        const clientId = encodeURIComponent(ids.clientId);
-        const clientSecret = encodeURIComponent(ids.clientSecret);
+        const clientId = ids.clientId;
+        const clientSecret = ids.clientSecret;
 
         const requestUrl = await this.prepareWebAuthFlowUrl(uniqueId, clientId, scope);
         return await this.launchWebAuthFlowInternal(requestUrl, clientId, clientSecret);
     }
 
-    launchWebAuthFlowInternal(requestUrl, clientId, clientSecret)
-    {
-        return new Promise((resolve, reject) => {
+    async processAuthorizationRedirectUri(responseUrl) {
+        const blob = new URL(responseUrl);
+        const state = blob.searchParams.get('state');
+        const code = blob.searchParams.get('code');
+        if (state === null || code === null) {
+            throw new DapiError('Incomplete redirect url');
+        }
 
-            chrome.identity.launchWebAuthFlow(
-                {url: requestUrl, interactive: true},
-                async function(responseUrl) {
-                    if (responseUrl) {
-                        const blob = new URL(responseUrl);
-                        const state = blob.searchParams.get('state');
-                        const code = blob.searchParams.get('code');
+        const uniqueId = (await UserInfo.get()).getUniqueId();
 
-                        let {oauth2reqs} = await this.config.get('oauth2reqs');
-                        let reqs = oauth2reqs[uniqueId];
-                        if (!reqs.state) {
-                            throw new EskError(`OAuth2 state [${state}] not exists`);
-                        }
+        let {oauth2reqs} = await this.config.get('oauth2reqs');
+        let reqs = oauth2reqs[uniqueId];
+        if (!reqs[state]) {
+            throw new EskError(`OAuth2 state [${state}] not exists`);
+        }
 
-                        let redirectUrl = encodeURIComponent(this.getRedirectUri());
-                        let tokenUrl = `https://www.deviantart.com/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&code=${code}&redirect_uri=${redirectUrl}`;
+        const ids = await this.getBoundAppData(uniqueId);
+        // FIXME! must make sure clientId and clientSecret are consistent with the request... later
+        const clientId = ids.clientId;
+        const clientSecret = ids.clientSecret;
 
-                        const tokenResponse = await fetch(tokenUrl, {redirect: 'follow'});
-                        const responseTimestamp = Date.now();
-                        if (!tokenResponse.ok) {
-                            throw new SomethingBadWithTokenError('Token request failed');
-                        }
+        let redirectUrl = encodeURIComponent(this.getRedirectUri());
+        let tokenUrl = `https://www.deviantart.com/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&code=${code}&redirect_uri=${redirectUrl}`;
 
-                        const parsedTokenResponse = await tokenResponse.json();
-                        if (parsedTokenResponse.error) {
-                            throw new SomethingBadWithTokenError(`Token retrieval error: ${parsedTokenResponse.error_description}`);
-                        }
-                        if (parsedTokenResponse.status !== 'success') {
-                            throw new SomethingBadWithTokenError('Token response is not successful');
-                        }
-                        if (parsedTokenResponse.token_type !== 'Bearer') {
-                            throw new SomethingBadWithTokenError(`Unsupported token type ${parsedTokenResponse.token_type}`);
-                        }
+        const tokenResponse = await fetch(tokenUrl, {redirect: 'follow'});
+        const responseTimestamp = Date.now();
+        if (!tokenResponse.ok) {
+            throw new SomethingBadWithTokenError('Token request failed');
+        }
 
-                        const tokenData = {timestamp: responseTimestamp};
-                        ['access_token', 'scope', 'expires_in', 'refresh_token'].forEach(
-                            key => {tokenData[key] = parsedTokenResponse[key]}
-                        );
+        const parsedTokenResponse = await tokenResponse.json();
+        if (parsedTokenResponse.error) {
+            throw new SomethingBadWithTokenError(`Token retrieval error: ${parsedTokenResponse.error_description}`);
+        }
+        if (parsedTokenResponse.status !== 'success') {
+            throw new SomethingBadWithTokenError('Token response is not successful');
+        }
+        if (parsedTokenResponse.token_type !== 'Bearer') {
+            throw new SomethingBadWithTokenError(`Unsupported token type ${parsedTokenResponse.token_type}`);
+        }
 
-                        reqs = {};
-                        oauth2reqs[uniqueId] = reqs;
+        const tokenData = {timestamp: responseTimestamp};
+        ['access_token', 'scope', 'expires_in', 'refresh_token'].forEach(
+            key => {tokenData[key] = parsedTokenResponse[key]}
+        );
 
-                        let {id2token} = await this.config.get('id2token');
-                        id2token[uniqueId] = tokenData;
+        reqs = {};
+        oauth2reqs[uniqueId] = reqs;
 
-                        await this.config.set({'id2token': id2token, 'oauth2reqs': oauth2reqs});
-                        resolve();
-                    } else {
-                        const lastError = chrome.runtime.lastError;
-                        const xmsg = lastError ? ` (${lastError.message})` : '';
-                        reject(new DapiError('chrome.identity.launchWebAuthFlow returned no responseUrl' + xmsg));
-                    }
-                }
-            );
-        });
+        let {id2token = {}} = await this.config.get('id2token');
+        id2token[uniqueId] = tokenData;
+
+        await this.config.set({'id2token': id2token, 'oauth2reqs': oauth2reqs});
     }
 
     async prepareWebAuthFlowUrl(uniqueId, clientId, scope)
     {
+        const clientIdString = encodeURIComponent(clientId);
+        const redirectUrlString = encodeURIComponent(this.getRedirectUri());
         const scopeString = encodeURIComponent(scope.join(' '));
         const timestamp = Date.now();
         const seed = btoa(Array.from(window.crypto.getRandomValues(new Uint8Array(32))).map(i => String.fromCharCode(i)).join(''));
-        const state = encodeURIComponent(`${timestamp}-${seed}`);
-        const redirectUrl = encodeURIComponent(this.getRedirectUri());
-        const requestUrl =  `https://www.deviantart.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scopeString}&state=${state}&view=login`;
+        const state = `${timestamp}-${seed}`;
+        const stateString = encodeURIComponent(state);
+        const requestUrl =  `https://www.deviantart.com/oauth2/authorize?response_type=code&client_id=${clientIdString}&redirect_uri=${redirectUrlString}&scope=${scopeString}&state=${stateString}&view=login`;
 
         let {oauth2reqs = {}} = await this.config.get(null);
         let storedRequests = oauth2reqs[uniqueId] || {};
@@ -247,6 +249,134 @@ export class Dapi
         await this.config.set({'oauth2reqs': oauth2reqs});
 
         return requestUrl;
+    }
+
+    async getTokenBlob(uniqueId)
+    {
+        let {id2token = {}} = await this.config.get();
+
+        let tokenData = id2token[uniqueId];
+        if (!tokenData) {
+            return null;
+        }
+
+        return tokenData;
+    }
+
+    async fetch(resource, init)
+    {
+        const uniqueId = (await UserInfo.get()).getUniqueId();
+
+        return new Promise((resolve, reject) => {
+            this.fetchWithAuth(uniqueId, resource, init)
+            .then(response => {
+                if (response.status !== 401) {
+                    resolve(response)
+                } else {
+                    this.refreshToken(uniqueId)
+                    .then(() => {
+                        this.fetchWithAuth(uniqueId, resource, init)
+                        .then(response => {
+                            if (response.status !== 401) {
+                                resolve(response);
+                            } else {
+                                throw new DapiError('Cannot refresh auth token');
+                            }
+                        })
+                        .catch(error => reject(error));
+                    });
+                }
+            })
+            .catch(error => reject(error));
+        });
+    }
+
+    async fetchWithAuth(uniqueId, resource, init)
+    {
+        const tokenData = await this.getTokenBlob(uniqueId);
+        if (!tokenData) {
+            throw new DapiError('Cannot retrieve auth token');
+        }
+
+        const accessToken = tokenData['access_token'];
+
+        const url = new URL(typeof resource === 'string' ? resource : resource.url);
+        url.searchParams.append('access_token', accessToken);
+
+        const request = new Request(url, typeof resource === 'object' ? resource : undefined);
+        return fetch(request, init);
+    }
+
+    async refreshToken(uniqueId)
+    {
+        const tokenData = await this.getTokenBlob(uniqueId);
+        if (!tokenData) {
+            throw new DapiError('Cannot retrieve auth token');
+        }
+
+        const refreshToken = tokenData['refresh_token'];
+
+        const ids = await this.getBoundAppData(uniqueId);
+        // FIXME! must make sure clientId and clientSecret are consistent with the request... later
+        const clientId = ids.clientId;
+        const clientSecret = ids.clientSecret;
+
+        const url = new URL ('https://www.deviantart.com/oauth2/token');
+        const sp = url.searchParams;
+        sp.append('grant_type', 'refresh_token');
+        sp.append('client_id', clientId);
+        sp.append('client_secret', clientSecret);
+        sp.append('refresh_token', refreshToken);
+
+        return new Promise((resolve, reject) => {
+            fetch(url)
+            .then(async tokenResponse => {
+                const responseTimestamp = Date.now();
+                const parsedTokenResponse = await tokenResponse.json();
+                if (parsedTokenResponse.error) {
+                    throw new SomethingBadWithTokenError(`Token retrieval error: ${parsedTokenResponse.error_description}`);
+                }
+                if (parsedTokenResponse.status !== 'success') {
+                    throw new SomethingBadWithTokenError('Token response is not successful');
+                }
+                if (parsedTokenResponse.token_type !== 'Bearer') {
+                    throw new SomethingBadWithTokenError(`Unsupported token type ${parsedTokenResponse.token_type}`);
+                }
+
+                const newTokenData = {timestamp: responseTimestamp};
+                ['access_token', 'scope', 'expires_in', 'refresh_token'].forEach(
+                    key => {newTokenData[key] = parsedTokenResponse[key]}
+                );
+
+                let {id2token = {}} = await this.config.get('id2token');
+                id2token[uniqueId] = newTokenData;
+
+                await this.config.set({'id2token': id2token});
+                resolve();
+            })
+            .catch(error => reject(error));
+        })
+    }
+
+    async deauthorize()
+    {
+        const uniqueId = (await UserInfo.get()).getUniqueId();
+        let {id2token = {}} = await this.config.get();
+
+        let tokenData = id2token[uniqueId];
+        if (!tokenData) {
+            return;
+        }
+
+        let data = new FormData();
+        data.append('revoke_refresh_only', 'true');
+        data.append('token', tokenData['refreshToken']);
+        const revokeUrl = `https://www.deviantart.com/oauth2/revoke`;
+        fetch(revokeUrl, {method: 'POST', body: data, redirect: 'follow'})
+        .then(() => {
+            delete id2token[uniqueId];
+            return this.config.set({'id2token': id2token});
+        });
     }
 }
 

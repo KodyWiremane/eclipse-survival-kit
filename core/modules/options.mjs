@@ -119,6 +119,14 @@ async function spawnUi(configuration) {
                 gDapiStatus.appendChild(createOptionText(
                     'STATUS_AUTHORIZED (handling yet to be implemented).'
                 ));
+                gDapiStatus.appendChild(createButton(
+                    'Test',
+                    e => {
+                        dapi.fetch('https://www.deviantart.com/api/v1/oauth2/placebo')
+                        .then(r => (window.alert(`RESPONSE: ${r.status}`)))
+                        .catch(e=> (console.log(e), window.alert(`ERROR: ${e.message}`)))
+                    }
+                ));
                 break;
             default:
                 gDapiStatus.appendChild(createOptionText(
@@ -131,13 +139,13 @@ async function spawnUi(configuration) {
     }
 
     function onClick_Activate() {
-        dapi.requestAuthorization(uniqueId, ESK_DAPI_SCOPE)
+        dapi.requestAuthorizationUri(uniqueId, ESK_DAPI_SCOPE)
         .catch(e => {
             log.error('Failed to activate API binding:', e);
             window.alert(`Failed to activate API binding: ${e.message}`);
             window.location.reload();
         })
-        .then(() => window.location.reload());
+        .then(authUri => window.location.href = authUri);
     }
 
     function onClick_Edit(appId) {
