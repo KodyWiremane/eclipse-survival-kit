@@ -123,7 +123,7 @@ async function spawnUi(configuration) {
                     'Test',
                     e => {
                         dapi.fetch('https://www.deviantart.com/api/v1/oauth2/placebo')
-                        .then(r => (window.alert(`RESPONSE: ${r.status}`)))
+                        .then(r => (window.alert(`RESPONSE: ${JSON.stringify(r)}`)))
                         .catch(e=> (console.log(e), window.alert(`ERROR: ${e.message}`)))
                     }
                 ));

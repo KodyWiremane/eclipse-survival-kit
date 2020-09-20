@@ -263,31 +263,88 @@ export class Dapi
         return tokenData;
     }
 
+    /*
+        DA API docs say:
+
+            200 - Request was successful
+            400 - Request failed due to client error, e.g. validation failed or User not found
+            429 - Rate limit reached or service overloaded see Rate Limits
+            500 - Our servers encountered an internal error, try again
+            503 - Our servers are currently unavailable, try again later.
+            This is normally due to planned or emergency maintenance.
+
+            We suggest that your client treats anything that is >= 400 as an error.
+
+        Actually, I get 401 when my token is stale. Ok, also:
+
+            In addition to the HTTP status, the response body will also contain a JSON error structure
+            giving more details about the error.
+
+            JSON Error Keys
+
+            error - The error type
+            error_description - The error message. You should NOT parse this as it may change, use error or error_code for conditional logic within your app
+            error_details - (Optional) For validation errors, this will be a key/value map containing error information for each field
+            error_code - (Optional) An additional endpoint specific error code
+
+
+    */
+
+    async query(url)
+    {
+        return new Promise((resolve, reject) => {
+            this.fetch(url)
+            .then(
+                response => {
+                    response.json()
+                    .then(
+                        json => {
+                            if (json.error) {
+                                reject(new DapiError(json.error_description));
+                            }
+                            resolve(json);
+                        },
+                    //.else()
+                        error => reject(error)
+                    );
+                },
+            //.else
+                error => reject(error)
+            )
+        });
+    }
+
     async fetch(resource, init)
     {
         const uniqueId = (await UserInfo.get()).getUniqueId();
 
         return new Promise((resolve, reject) => {
             this.fetchWithAuth(uniqueId, resource, init)
-            .then(response => {
-                if (response.status !== 401) {
-                    resolve(response)
-                } else {
-                    this.refreshToken(uniqueId)
-                    .then(() => {
-                        this.fetchWithAuth(uniqueId, resource, init)
-                        .then(response => {
-                            if (response.status !== 401) {
-                                resolve(response);
-                            } else {
-                                throw new DapiError('Cannot refresh auth token');
-                            }
-                        })
-                        .catch(error => reject(error));
-                    });
-                }
-            })
-            .catch(error => reject(error));
+            .then(
+                response => {
+                    if (response.status !== 401) {
+                        resolve(response)
+                    } else {
+                        this.refreshToken(uniqueId)
+                        .then(() => {
+                            this.fetchWithAuth(uniqueId, resource, init)
+                            .then(
+                                response => {
+                                    if (response.status !== 401) {
+                                        resolve(response);
+                                    } else {
+                                        throw new DapiError('Cannot refresh auth token');
+                                    }
+                                },
+                            //.else()
+                                error => reject(error)
+                            );
+                        });
+                    }
+                },
+            //.else()
+                error => reject(error)
+            );
         });
     }
 
@@ -304,7 +361,7 @@ export class Dapi
         url.searchParams.append('access_token', accessToken);
 
         const request = new Request(url, typeof resource === 'object' ? resource : undefined);
-        return fetch(request, init);
+        return await window.fetch(request, init);
     }
 
     async refreshToken(uniqueId)
