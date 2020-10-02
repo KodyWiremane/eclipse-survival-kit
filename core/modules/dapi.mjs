@@ -148,7 +148,8 @@ export class Dapi
     getRedirectUri()
     {
         //return chrome.identity.getRedirectURL('/ESK/');
-        return chrome.runtime.getURL('core/authorize.html');
+        //return chrome.runtime.getURL('core/authorize.html');
+        return 'https://localhost/ESK/authorize/';
     }
 
     getEditUriForAppId(appId)

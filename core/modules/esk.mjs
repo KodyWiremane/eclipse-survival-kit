@@ -25,6 +25,7 @@ const dapi = new Dapi();
 
 setupMessageDispatcher();
 setupFakePortListener();
+setupAuthUriInterceptor();
 
 fillConfigGapsWithDefaults()
 .then(() => log.info('Extension started successfully'))
@@ -80,6 +81,25 @@ function messageDispatcher (envelope, sender, talkback) {
 // for app-settings-widget.js:setupRuntimeMonitor()
 function setupFakePortListener() {
     chrome.runtime.onConnect.addListener(() => {});
+}
+
+// for Dapi::processAuthorizationRedirectUri
+function setupAuthUriInterceptor() {
+    const redirectUri = dapi.getRedirectUri();
+    const internalRedirectUri = chrome.runtime.getURL('core/authorize.html');
+
+    function handleTabUrl(tab, url) {
+        if (url && url.startsWith(redirectUri)) {
+            const finalUrl = url.replace(redirectUri, internalRedirectUri);
+            chrome.tabs.update(tab.id, {url: finalUrl, active: true});
+            //chrome.tabs.remove(tab.id);
+            //dapi.processAuthorizationRedirectUri(url)
+            //.then(() => chrome.runtime.openOptionsPage());
+        }
+    }
+
+    chrome.tabs.onCreated.addListener(tab => handleTabUrl(tab, tab.url || tab.pendingUrl));
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => handleTabUrl(tab, changeInfo.url));
 }
 
 
