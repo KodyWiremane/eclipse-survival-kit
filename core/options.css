@@ -40,6 +40,17 @@ body > h1:first-child
     letter-spacing: .15em;
 }
 
+.option-group.dangerous
+{
+    border-color: #806262;
+    background-color: #decece;
+}
+
+.option-group.dangerous::before
+{
+    background-color: #806262;
+}
+
 .option-group > *,
 .radio-group > *
 {
@@ -85,6 +96,12 @@ body > h1:first-child
     height: 1.5em;
     border-width: .5mm;
     border-color: #62806a;
+}
+
+.dangerous .control-button
+{
+    background-color: #f2bbbb;
+    border-color: #806262;
 }
 
 .control-button + .control-button

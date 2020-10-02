@@ -1,11 +1,12 @@
 import {EskExtensionConfig} from './esk-extension-config.mjs';
 import {UserInfo} from './userinfo.mjs';
 import {Dapi} from './dapi.mjs';
+import {DapiConfig} from './dapi-config.mjs';
 
 const config = new EskExtensionConfig();
 const log = new NativeLogger('ESK:CFG')
 const dapi = new Dapi();
-const ESK_DAPI_SCOPE = ['basic'];
+const ESK_DAPI_SCOPE = ['basic', 'browse'];
 
 config.get({
     'ui-augments.add-thumbs-with-ordinal-indices': true,
@@ -31,12 +32,14 @@ async function spawnUi(configuration) {
     const gDapiStatus = createOptionGroup('Auth Status');
     const gUiAugments = createOptionGroup('UI Augments');
     const gUiPatches = createOptionGroup('UI Patches');
+    const gUiDangerous = createDangerousOptionGroup('Reset');
 
     [
         gNote,
         gDapiStatus,
         gUiAugments,
-        gUiPatches
+        gUiPatches,
+        gUiDangerous
     ]
     .forEach(group => container.appendChild(group));
 
@@ -122,11 +125,19 @@ async function spawnUi(configuration) {
                 gDapiStatus.appendChild(createButton(
                     'Test',
                     e => {
-                        dapi.fetch('https://www.deviantart.com/api/v1/oauth2/placebo')
+                        dapi.query('https://www.deviantart.com/api/v1/oauth2/placebo')
                         .then(r => (window.alert(`RESPONSE: ${JSON.stringify(r)}`)))
                         .catch(e=> (console.log(e), window.alert(`ERROR: ${e.message}`)))
                     }
                 ));
+                gDapiStatus.appendChild(createButton(
+                    'Test Get Folders',
+                    e => {
+                        dapi.query('https://www.deviantart.com/api/v1/oauth2/collections/folders')
+                        .then(r => (window.alert(`RESPONSE: ${JSON.stringify(r)}`)))
+                        .catch(e=> (console.log(e), window.alert(`ERROR: ${e.message}`)))
+                    }
+                ))
                 break;
             default:
                 gDapiStatus.appendChild(createOptionText(
@@ -214,6 +225,54 @@ async function spawnUi(configuration) {
         )
     ]
     .forEach(item => gUiPatches.appendChild(item));
+
+    [
+        createOptionText(
+            'Resetting settings will set all customizable options to their default values '
+            + 'and reload ESK so they come into effect.'
+        ),
+        createButton(
+            'Reset Settings',
+            resetSettings
+        ),
+        createOptionHtmlText(
+            'Wiping authentication data will delete all access tokens and related data ESK has stored '
+            + 'in this browser, and reload ESK. Note that this is a fallback procedure that should not '
+            + 'be used normally or without understanding of its consequences. Also note that this '
+            + 'will not revoke access tokens on DA side; you will have to take care of that yourself,'
+            + 'on <a href="https://www.deviantart.com/settings/apps">DA Applications Settings</a> page.'
+        ),
+        createButton(
+            'Wipe Auth Data',
+            wipeAuthData
+        )
+    ]
+    .forEach(item => gUiDangerous.appendChild(item));
+
+    function resetSettings() {
+        if (!window.confirm('Do you want to reset ESK settings?')) {
+            return;
+        }
+        config.clear()
+        .then(
+            () => chrome.runtime.reload(),
+        //.else()
+            error => window.alert(`Failed to reset settings: ${error.message}`)
+        );
+    }
+
+    function wipeAuthData() {
+        if (!window.confirm('Do you want to wipe ESK authentication data?')) {
+            return;
+        }
+        const dapiConfig = new DapiConfig();
+        dapiConfig.clear()
+        .then(
+            () => chrome.runtime.reload(),
+        //.else()
+            error => window.alert(`Failed to wipe authentication data: ${error.message}`)
+        );
+    }
 }
 
 
@@ -222,6 +281,12 @@ function createOptionGroup(label) {
     const group = document.createElement('section');
     group.className = 'option-group';
     group.setAttribute('data-label', label);
+    return group;
+}
+
+function createDangerousOptionGroup(label) {
+    const group = createOptionGroup(label);
+    group.className = [group.className, 'dangerous'].join(' ');
     return group;
 }
 
@@ -235,6 +300,13 @@ function createOptionText(text) {
     const wrapper = document.createElement('div');
     wrapper.className = 'option-text';
     wrapper.appendChild(document.createTextNode(text));
+    return wrapper;
+}
+
+function createOptionHtmlText(html) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'option-text';
+    wrapper.innerHTML = html;
     return wrapper;
 }
 
