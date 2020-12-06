@@ -1,5 +1,5 @@
 /* Set <body data-esk-flags> from the config to trigger CSS patches */
-(() => {
+(async () => {
 
 'use strict';
 
@@ -13,6 +13,9 @@ const FLAGS = {
     'ui-patches.fix-comment-avatar-ghost-link': 'fix-ghost-comlink',
     'ui-patches.fix-um-fallout': 'fix-um-fallout'
 };
+
+const EskMessageClient = (await import('./lib/esk-message-client.js')).EskMessageClient;
+const NativeLogger = (await import('./lib/native-logger.js')).NativeLogger;
 
 const log = new NativeLogger('ESK:FLAGS');
 const eskLink = new EskMessageClient();

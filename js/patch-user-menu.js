@@ -1,6 +1,6 @@
 /* Add profile section links to the user menu. */
 /* FYI: There are users named literally favourites and Favorites. */
-(() => {
+(async () => {
 
 'use strict';
 
@@ -10,6 +10,11 @@ const SECTION_IN_MENU = 0; // inject the link into this menu section (0-based in
 const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
+
+const DomRadar = (await import('./lib/dom-radar.js')).DomRadar;
+const EskMessageClient = (await import('./lib/esk-message-client.js')).EskMessageClient;
+const NativeLogger = (await import('./lib/native-logger.js')).NativeLogger;
+const Timer = (await import('./lib/timer.js')).Timer;
 
 const log = new NativeLogger('ESK:PUM');
 const eskLink = new EskMessageClient();
