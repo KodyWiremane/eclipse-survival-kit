@@ -1,8 +1,8 @@
 /* A wrapper class for PrefixedStorage using promises instead of callbacks */
 
 import {PrefixedStorage} from './prefixed-storage.mjs';
-import {EskChainedError} from '../../js/lib/error-root.js';
-import {isFunction} from '../../js/lib/utils.js';
+import {EskChainedError} from '../../js/modules/error-root.mjs';
+import {isFunction} from '../../js/modules/utils.mjs';
 
 export class PromisedStorage
 {

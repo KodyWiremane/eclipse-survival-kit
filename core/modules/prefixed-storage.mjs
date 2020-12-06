@@ -11,7 +11,7 @@ import {
     phpType,
     prefixArrayValues,
     prefixObjectKeys
-} from '../../js/lib/utils.js';
+} from '../../js/modules/utils.mjs';
 
 export class PrefixedStorage
 {

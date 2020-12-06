@@ -1,6 +1,6 @@
 'use strict'
 
-import {isNull, isObject, isString} from './utils.js';
+import {isNull, isObject, isString} from './utils.mjs';
 
 export class EskMessageClient
 {

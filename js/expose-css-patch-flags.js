@@ -14,8 +14,8 @@ const FLAGS = {
     'ui-patches.fix-um-fallout': 'fix-um-fallout'
 };
 
-const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/lib/esk-message-client.js');
-const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/lib/native-logger.js');
+const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/modules/esk-message-client.mjs');
+const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/modules/native-logger.mjs');
 
 const EskMessageClient = (await import(URL_ESK_MESSAGE_CLIENT)).EskMessageClient;
 const NativeLogger = (await import(URL_NATIVE_LOGGER)).NativeLogger;

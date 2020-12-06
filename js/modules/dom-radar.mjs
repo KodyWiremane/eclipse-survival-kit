@@ -1,6 +1,6 @@
 'use strict';
 
-import {isFunction, isNodeDescendant} from './utils.js';
+import {isFunction, isNodeDescendant} from './utils.mjs';
 
 export class DomRadar
 {

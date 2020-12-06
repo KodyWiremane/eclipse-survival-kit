@@ -12,11 +12,11 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 
-const URL_DOM_RADAR = chrome.runtime.getURL('js/lib/dom-radar.js');
-const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/lib/esk-message-client.js');
-const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/lib/native-logger.js');
-const URL_TIMER = chrome.runtime.getURL('js/lib/timer.js');
-const URL_UTILS = chrome.runtime.getURL('js/lib/utils.js');
+const URL_DOM_RADAR = chrome.runtime.getURL('js/modules/dom-radar.mjs');
+const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/modules/esk-message-client.mjs');
+const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/modules/native-logger.mjs');
+const URL_TIMER = chrome.runtime.getURL('js/modules/timer.mjs');
+const URL_UTILS = chrome.runtime.getURL('js/modules/utils.mjs');
 
 const DomRadar = (await import(URL_DOM_RADAR)).DomRadar;
 const EskMessageClient = (await import(URL_ESK_MESSAGE_CLIENT)).EskMessageClient;

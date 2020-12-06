@@ -1,6 +1,6 @@
 // Defines basic classes for ESK-scoped errors
 
-import {isArray, isString, isUndefined} from './utils.js';
+import {isArray, isString, isUndefined} from './utils.mjs';
 
 export class EskError extends Error
 {
