@@ -2,6 +2,7 @@ import {EskExtensionConfig} from './esk-extension-config.mjs';
 import {UserInfo} from './userinfo.mjs';
 import {Dapi} from './dapi.mjs';
 import {DapiConfig} from './dapi-config.mjs';
+import {NativeLogger} from '../../js/lib/native-logger.js';
 
 const config = new EskExtensionConfig();
 const log = new NativeLogger('ESK:CFG')

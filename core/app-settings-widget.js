@@ -1,6 +1,9 @@
-(() => {
+(async () => {
 
 'use strict';
+
+const NativeLogger = (await import('../js/lib/native-logger.js')).NativeLogger;
+const EskMessageClient = (await import('../js/lib/esk-message-client.js')).EskMessageClient;
 
 const log = new NativeLogger('ESK:ASW');
 const eskLink = new EskMessageClient();

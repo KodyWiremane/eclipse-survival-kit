@@ -2,6 +2,8 @@
 
 import {EskExtensionConfig} from './esk-extension-config.mjs';
 import {Dapi} from './dapi.mjs';
+import {NativeLogger} from '../../js/lib/native-logger.js';
+import {isObject} from '../../js/lib/utils.js';
 
 /* DEFINITIONS */
 const DEFAULTS = {

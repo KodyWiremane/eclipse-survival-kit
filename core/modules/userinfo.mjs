@@ -1,5 +1,7 @@
 /* Gear to access data in DA userinfo cookie */
 
+import {EskError} from '../../js/lib/error-root.js';
+
 async function getUserInfo() {
     const raw = await getUserInfoCookie();
     return getUserInfoFromRaw(raw);

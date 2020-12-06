@@ -2,6 +2,7 @@
 
 import {UserInfo} from './userinfo.mjs';
 import {DapiConfig} from './dapi-config.mjs';
+import {EskError} from '../../js/lib/error-root.js';
 
 
 export class Dapi

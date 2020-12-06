@@ -1,5 +1,7 @@
 'use strict';
 
+import {isFunction, isNodeDescendant} from './utils.js';
+
 export class DomRadar
 {
     constructor(scope = document, config = {childList: true, subtree: true}, armed = true)

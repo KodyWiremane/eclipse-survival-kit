@@ -1,5 +1,7 @@
 // Defines basic classes for ESK-scoped errors
 
+import {isArray, isString, isUndefined} from './utils.js';
+
 export class EskError extends Error
 {
     constructor(message = undefined, fileName = undefined, lineNumber = undefined)

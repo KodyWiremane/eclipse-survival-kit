@@ -15,6 +15,7 @@ const DomRadar = (await import('./lib/dom-radar.js')).DomRadar;
 const EskMessageClient = (await import('./lib/esk-message-client.js')).EskMessageClient;
 const NativeLogger = (await import('./lib/native-logger.js')).NativeLogger;
 const Timer = (await import('./lib/timer.js')).Timer;
+const isUndefined = (await import('./lib/utils')).isUndefined;
 
 const log = new NativeLogger('ESK:PUM');
 const eskLink = new EskMessageClient();

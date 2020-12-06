@@ -1,4 +1,5 @@
 import {Dapi} from './dapi.mjs';
+import {NativeLogger} from '../../js/lib/native-logger.js';
 
 const dapi = new Dapi();
 const log = new NativeLogger('ESK:AUTH');

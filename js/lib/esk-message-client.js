@@ -1,5 +1,7 @@
 'use strict'
 
+import {isNull, isObject, isString} from './utils.js';
+
 export class EskMessageClient
 {
     sendMessage(messageName, messagePayload = undefined)
