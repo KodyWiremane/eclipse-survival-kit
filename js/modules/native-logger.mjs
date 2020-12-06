@@ -1,6 +1,8 @@
 'use strict';
 
-class NativeLogger extends Logger {
+import {Logger} from './logger.mjs';
+
+export class NativeLogger extends Logger {
     logWithLevel(levelName, message, ...extras)
     {
         const method = {

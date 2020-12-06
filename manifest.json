@@ -22,6 +22,16 @@
     {
         "page": "core/core.html"
     },
+    "web_accessible_resources":
+    [
+        "js/modules/dom-radar.mjs",
+        "js/modules/error-root.mjs",
+        "js/modules/esk-message-client.mjs",
+        "js/modules/logger.mjs",
+        "js/modules/native-logger.mjs",
+        "js/modules/timer.mjs",
+        "js/modules/utils.mjs"
+    ],
     "content_scripts":
     [
         {
@@ -41,12 +51,6 @@
             ],
             "js":
             [
-                "js/lib/logger.js",
-                "js/lib/native-logger.js",
-                "js/lib/timer.js",
-                "js/lib/utils.js",
-                "js/lib/dom-radar.js",
-                "js/lib/esk-message-client.js",
                 "js/expose-css-patch-flags.js",
                 "js/patch-user-menu.js"
             ],

@@ -1,6 +1,8 @@
 'use strict';
 
-class DomRadar
+import {isFunction, isNodeDescendant} from './utils.mjs';
+
+export class DomRadar
 {
     constructor(scope = document, config = {childList: true, subtree: true}, armed = true)
     {

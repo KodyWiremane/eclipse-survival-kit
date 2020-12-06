@@ -1,5 +1,18 @@
 /* A wrapper class for chrome.storage for working with sets of keys sharing a common prefix. */
 
+import {
+    deprefixObjectKeys,
+    filterAndDeprefixObjectKeys,
+    isFunction,
+    isNull,
+    isObject,
+    isString,
+    isUndefined,
+    phpType,
+    prefixArrayValues,
+    prefixObjectKeys
+} from '../../js/modules/utils.mjs';
+
 export class PrefixedStorage
 {
     constructor(keyPrefix = '', storageAreaName = 'local')

@@ -1,6 +1,6 @@
 /* Add profile section links to the user menu. */
 /* FYI: There are users named literally favourites and Favorites. */
-(() => {
+(async () => {
 
 'use strict';
 
@@ -10,6 +10,19 @@ const SECTION_IN_MENU = 0; // inject the link into this menu section (0-based in
 const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
+
+
+const URL_DOM_RADAR = chrome.runtime.getURL('js/modules/dom-radar.mjs');
+const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/modules/esk-message-client.mjs');
+const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/modules/native-logger.mjs');
+const URL_TIMER = chrome.runtime.getURL('js/modules/timer.mjs');
+const URL_UTILS = chrome.runtime.getURL('js/modules/utils.mjs');
+
+const DomRadar = (await import(URL_DOM_RADAR)).DomRadar;
+const EskMessageClient = (await import(URL_ESK_MESSAGE_CLIENT)).EskMessageClient;
+const NativeLogger = (await import(URL_NATIVE_LOGGER)).NativeLogger;
+const Timer = (await import(URL_TIMER)).Timer;
+const isUndefined = (await import(URL_UTILS)).isUndefined;
 
 const log = new NativeLogger('ESK:PUM');
 const eskLink = new EskMessageClient();

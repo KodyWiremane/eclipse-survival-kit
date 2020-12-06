@@ -1,6 +1,8 @@
 'use strict'
 
-class EskMessageClient
+import {isNull, isObject, isString} from './utils.mjs';
+
+export class EskMessageClient
 {
     sendMessage(messageName, messagePayload = undefined)
     {
