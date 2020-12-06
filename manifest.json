@@ -22,6 +22,16 @@
     {
         "page": "core/core.html"
     },
+    "web_accessible_resources":
+    [
+        "js/lib/dom-radar.js",
+        "js/lib/error-root.js",
+        "js/lib/esk-message-client.js",
+        "js/lib/logger.js",
+        "js/lib/native-logger.js",
+        "js/lib/timer.js",
+        "js/lib/utils.js"
+    ],
     "content_scripts":
     [
         {

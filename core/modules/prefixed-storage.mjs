@@ -1,6 +1,17 @@
 /* A wrapper class for chrome.storage for working with sets of keys sharing a common prefix. */
 
-import {isFunction, isNull, isObject, isString, isUndefined} from '../../js/lib/utils.js';
+import {
+    deprefixObjectKeys,
+    filterAndDeprefixObjectKeys,
+    isFunction,
+    isNull,
+    isObject,
+    isString,
+    isUndefined,
+    phpType,
+    prefixArrayValues,
+    prefixObjectKeys
+} from '../../js/lib/utils.js';
 
 export class PrefixedStorage
 {

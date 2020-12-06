@@ -2,8 +2,11 @@
 
 'use strict';
 
-const NativeLogger = (await import('../js/lib/native-logger.js')).NativeLogger;
-const EskMessageClient = (await import('../js/lib/esk-message-client.js')).EskMessageClient;
+const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/lib/esk-message-client.js');
+const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/lib/native-logger.js');
+
+const EskMessageClient = (await import(URL_ESK_MESSAGE_CLIENT)).EskMessageClient;
+const NativeLogger = (await import(URL_NATIVE_LOGGER)).NativeLogger;
 
 const log = new NativeLogger('ESK:ASW');
 const eskLink = new EskMessageClient();

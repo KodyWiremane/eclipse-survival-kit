@@ -11,11 +11,18 @@ const POSITION_IN_SECTION = 1; // this position (0-based index)
 
 
 
-const DomRadar = (await import('./lib/dom-radar.js')).DomRadar;
-const EskMessageClient = (await import('./lib/esk-message-client.js')).EskMessageClient;
-const NativeLogger = (await import('./lib/native-logger.js')).NativeLogger;
-const Timer = (await import('./lib/timer.js')).Timer;
-const isUndefined = (await import('./lib/utils')).isUndefined;
+
+const URL_DOM_RADAR = chrome.runtime.getURL('js/lib/dom-radar.js');
+const URL_ESK_MESSAGE_CLIENT = chrome.runtime.getURL('js/lib/esk-message-client.js');
+const URL_NATIVE_LOGGER = chrome.runtime.getURL('js/lib/native-logger.js');
+const URL_TIMER = chrome.runtime.getURL('js/lib/timer.js');
+const URL_UTILS = chrome.runtime.getURL('js/lib/utils.js');
+
+const DomRadar = (await import(URL_DOM_RADAR)).DomRadar;
+const EskMessageClient = (await import(URL_ESK_MESSAGE_CLIENT)).EskMessageClient;
+const NativeLogger = (await import(URL_NATIVE_LOGGER)).NativeLogger;
+const Timer = (await import(URL_TIMER)).Timer;
+const isUndefined = (await import(URL_UTILS)).isUndefined;
 
 const log = new NativeLogger('ESK:PUM');
 const eskLink = new EskMessageClient();
