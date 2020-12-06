@@ -1,6 +1,6 @@
 'use strict';
 
-class Timer
+export class Timer
 {
     constructor(timeout, callback, ...callbackArguments)
     {

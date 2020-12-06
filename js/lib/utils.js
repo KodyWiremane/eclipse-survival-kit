@@ -2,33 +2,33 @@
 
 /* TYPE CHECKS */
 
-function isUndefined(target) {
+export function isUndefined(target) {
     return typeof target === 'undefined';
 }
 
-function isString(target) {
+export function isString(target) {
     return typeof target === 'string';
 }
 
-function isFunction(target) {
+export function isFunction(target) {
     return typeof target === 'function';
 }
 
-function isNull(target) {
+export function isNull(target) {
     return target === null;
 }
 
-function isArray(target) {
+export function isArray(target) {
     return Array.isArray(target);
 }
 
-function isObject (target) {
+export function isObject (target) {
     return typeof target === 'object'
     && !isNull(target)
     && !isArray(target);
 }
 
-function phpType(target) {
+export function phpType(target) {
     const nativeType = typeof target;
     switch (nativeType) {
         case 'undefined':
@@ -56,19 +56,19 @@ function phpType(target) {
 
 /* STRING OPERATIONS */
 
-function splitStringOnce(string, separator) {
+export function splitStringOnce(string, separator) {
     const [left, ...rights] = string.split(separator);
     return [left, rights.join(separator)];
 }
 
-function trimTupleLeft(tuple) {
+export function trimTupleLeft(tuple) {
     tuple[0] = tuple[0].trim();
     return tuple;
 }
 
 /* CONTAINER OPERATIONS */
 
-function prefixArrayValues(target, valuePrefix) {
+export function prefixArrayValues(target, valuePrefix) {
     if (!isArray(target)) {
         throw 'target must be array';
     }
@@ -78,7 +78,7 @@ function prefixArrayValues(target, valuePrefix) {
     return target.map((value) => `${valuePrefix}${value}`);
 }
 
-function prefixObjectKeys(target, keyPrefix) {
+export function prefixObjectKeys(target, keyPrefix) {
     if (!isObject(target)) {
         throw 'target must be object';
     }
@@ -92,7 +92,7 @@ function prefixObjectKeys(target, keyPrefix) {
     }, {});
 }
 
-function deprefixObjectKeys(target, keyPrefix) {
+export function deprefixObjectKeys(target, keyPrefix) {
     if (!isObject(target)) {
         throw 'target must be object';
     }
@@ -106,7 +106,7 @@ function deprefixObjectKeys(target, keyPrefix) {
     }, {});
 }
 
-function filterObjectKeyPrefix(target, keyPrefix) {
+export function filterObjectKeyPrefix(target, keyPrefix) {
     if (!isObject(target)) {
         throw 'target must be object';
     }
@@ -122,13 +122,13 @@ function filterObjectKeyPrefix(target, keyPrefix) {
     }, {});
 }
 
-function filterAndDeprefixObjectKeys(target, keyPrefix) {
+export function filterAndDeprefixObjectKeys(target, keyPrefix) {
     return deprefixObjectKeys(filterObjectKeyPrefix(target, keyPrefix), keyPrefix);
 }
 
 /* DOM OPERATIONS */
 
-function isNodeDescendant(node, descendant) {
+export function isNodeDescendant(node, descendant) {
     while (descendant.parentNode) {
         descendant = descendant.parentNode;
         if (descendant === node) {
@@ -141,7 +141,7 @@ function isNodeDescendant(node, descendant) {
 
 /* DA INTERFACE */
 
-function getUsernameFromCookies() {
+export function getUsernameFromCookies() {
     const cookies = document.cookie.split(';').reduce((cookies, cookieString) => {
         const [cookieName, cookieValue] = trimTupleLeft(splitStringOnce(cookieString, '='));
         cookies[cookieName] = cookieValue;

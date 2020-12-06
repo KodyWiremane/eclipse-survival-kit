@@ -1,6 +1,6 @@
 'use strict';
 
-class DomRadar
+export class DomRadar
 {
     constructor(scope = document, config = {childList: true, subtree: true}, armed = true)
     {

@@ -1,6 +1,6 @@
 'use strict';
 
-class Logger {
+export class Logger {
     constructor(scopeName)
     {
         this.scopeName = `[${scopeName}]`;

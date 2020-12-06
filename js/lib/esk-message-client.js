@@ -1,6 +1,6 @@
 'use strict'
 
-class EskMessageClient
+export class EskMessageClient
 {
     sendMessage(messageName, messagePayload = undefined)
     {

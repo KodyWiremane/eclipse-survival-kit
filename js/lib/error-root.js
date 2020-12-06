@@ -1,6 +1,6 @@
 // Defines basic classes for ESK-scoped errors
 
-class EskError extends Error
+export class EskError extends Error
 {
     constructor(message = undefined, fileName = undefined, lineNumber = undefined)
     {
@@ -8,7 +8,7 @@ class EskError extends Error
     }
 }
 
-class EskChainedError extends EskError
+export class EskChainedError extends EskError
 {
     constructor(previousError, message = undefined, fileName = undefined, lineNumber = undefined)
     {
@@ -20,7 +20,7 @@ class EskChainedError extends EskError
     }
 }
 
-class EskAggregateError extends EskError
+export class EskAggregateError extends EskError
 {
     constructor(errors, message = undefined)
     {
